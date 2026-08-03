@@ -104,6 +104,32 @@ const isP2P = asset.id === 'p2p-lending'
       </section>
     )}
 
+    {/* P2P platforms */}
+    {isP2P && (
+      <section class="section p2p-platforms" aria-label="P2P platforms">
+        <h2 class="section-h mono">RBI-registered NBFC-P2P platforms</h2>
+        <p class="risk-notes">
+          Verify current RBI-registered NBFC-P2P status before funding — some wallet "Xtra"-style
+          products were restructured after the Aug-2024 crackdown. Spread across borrowers (RBI caps
+          ₹50k per borrower, ₹50L aggregate across all platforms).
+        </p>
+        <ul class="platform-list">
+          <li><a href="https://www.lendenclub.com/" target="_blank" rel="noopener noreferrer">LenDenClub</a> — largest; fined ₹1.99Cr (Aug-2024)</li>
+          <li><a href="https://faircent.com/" target="_blank" rel="noopener noreferrer">Faircent</a> — oldest NBFC-P2P licence</li>
+          <li><a href="https://www.i2ifunding.com/" target="_blank" rel="noopener noreferrer">i2iFunding</a></li>
+          <li><a href="https://www.finzy.com/" target="_blank" rel="noopener noreferrer">Finzy</a></li>
+          <li><a href="https://www.lendbox.in/" target="_blank" rel="noopener noreferrer">Lendbox</a> — backs CRED Mint + others</li>
+          <li><a href="https://liquiloans.com/" target="_blank" rel="noopener noreferrer">LiquiLoans</a> — backs many wallet "Xtra" products</li>
+          <li><a href="https://www.mobikwik.com/xtra" target="_blank" rel="noopener noreferrer">MobiKwik Xtra</a> — LiquiLoans-backed</li>
+          <li><a href="https://www.cred.club/mint" target="_blank" rel="noopener noreferrer">CRED Mint</a> — Lendbox-backed</li>
+          <li><a href="https://12percent.club/" target="_blank" rel="noopener noreferrer">12% Club (BharatPe)</a> — the literal "12%" branding RBI cracked down on</li>
+          <li><a href="https://www.indiap2p.com/" target="_blank" rel="noopener noreferrer">IndiaP2P</a></li>
+          <li><a href="https://rupeecircle.com/" target="_blank" rel="noopener noreferrer">RupeeCircle</a></li>
+          <li><a href="https://www.monexo.co/" target="_blank" rel="noopener noreferrer">Monexo</a></li>
+        </ul>
+      </section>
+    )}
+
     {/* Risk notes */}
     <section class="section">
       <h2 class="section-h mono">Risk notes</h2>
