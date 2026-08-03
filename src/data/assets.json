@@ -68,6 +68,29 @@
       "sourceUrl": "https://www.valueresearchonline.com/"
     },
     {
+      "id": "motilal-value-index",
+      "name": "Motilal Oswal BSE Enhanced Value Index — direct growth",
+      "sleeve": "global-value",
+      "ticker": "MO-BSE-VALUE",
+      "expectedReturn": 0.15,
+      "volatility": 0.19,
+      "histCagr": { "y3": 0.28 },
+      "belowFloor": false,
+      "riskNotes": "YOUR INDIA LOW-PE VALUE PICK. Tracks BSE Enhanced Value TRI — 30 cheapest large/midcaps by P/E+P/B+P/S. Rules-based value INDEX = near-zero churn for you (rebalances internally like GVAL does globally). ER 0.49% (index-cheap), AUM ~₹2,200 cr, ~28-30% since launch (short history, value re-rated recently — don't extrapolate). Multi-metric not pure low-PE; concentrated 30 stocks so swings vs broad market. Value+passive+low-cost+India = your thesis domestically.",
+      "sourceUrl": "https://www.motilaloswalmf.com/"
+    },
+    {
+      "id": "quant-quantamental",
+      "name": "Quant Quantamental Fund — direct growth",
+      "sleeve": "concentrated",
+      "ticker": "QUANT-QM",
+      "expectedReturn": 0.16,
+      "volatility": 0.26,
+      "belowFloor": false,
+      "riskNotes": "AGGRESSIVE QUANT SATELLITE (Very High risk). Quant+fundamental blend, AUM ~₹1,650 cr, 3Y ~20-22%, ER ~0.7-0.9%. A STRATEGY bet (vs Quant Small Cap = size bet, Quant Flexi = core). Whipsaws hard when factors rotate — Quant MF's rapid factor-switching gives big swings + long cold stretches. Satellite-sized only, NOT core. Fits max-return appetite, fights low-churn (churns internally).",
+      "sourceUrl": "https://www.valueresearchonline.com/"
+    },
+    {
       "id": "liquid-emergency",
       "name": "Union Liquid Fund — direct growth (EMERGENCY, not growth)",
       "sleeve": "arbitrage",
