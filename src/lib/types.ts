@@ -6,6 +6,8 @@
 export type Sleeve =
   | 'indian-equity'
   | 'intl-equity'
+  | 'global-value'
+  | 'concentrated'
   | 'gold'
   | 'reits-invits'
   | 'p2p-lending'
@@ -16,10 +18,14 @@ export interface Asset {
   id: string
   name: string
   sleeve: Sleeve
+  /** Ticker (for ETFs buyable via INDmoney), optional */
+  ticker?: string
   /** Decimal e.g. 0.14 */
   expectedReturn: number
   /** Annualised stddev, decimal */
   volatility: number
+  /** Forward P/E ratio (for value investing), optional */
+  peRatio?: number
   histCagr?: {
     y1?: number
     y3?: number
