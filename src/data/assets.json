@@ -77,10 +77,10 @@
       "id": "p2p-lending",
       "name": "P2P Lending (RBI NBFC-P2P)",
       "sleeve": "p2p-lending",
-      "expectedReturn": 0.12,
+      "expectedReturn": 0.20,
       "volatility": 0.06,
       "belowFloor": false,
-      "riskNotes": "ASSUMPTION: 12% expected return is a USER-SET assumption, not a verified forward number. Reality check stands: advertised 10-18% is GROSS/PRE-DEFAULT MARKETING. RBI (Aug-2024) BANNED assured-return marketing, credit guarantees, secondary-market liquidity. Lender bears 100% of default loss; unsecured; NO liquidity (locked till repay); NO deposit guarantee; slab-taxed (no LTCG). Independent research puts realistic net at ~6-10%. RBI publishes NO official NPA time-series (4-12% inferred). Caps: ₹50L aggregate, ₹50k per borrower. Enforcement real (LenDenClub ₹1.99cr, NDX ₹1.92cr fined). Vol shown low (0.06) but that HIDES tail default + illiquidity risk — do not read as truly low-risk.",
+      "riskNotes": "ASSUMPTION: 20% is the return YOU have realized so far — a track record, not a guarantee. Reality check stands: advertised/realized 20% is PRE the next default cycle. RBI (Aug-2024) BANNED assured-return marketing, credit guarantees, secondary-market liquidity. Lender bears 100% of default loss; unsecured; NO liquidity; NO deposit guarantee; slab-taxed (no LTCG — a 20% gross is ~14% net at 30% slab). Independent research puts diversified net at ~6-10% across a full cycle. Vol shown low (0.06) DRAMATICALLY understates tail risk: P2P risk is sudden mass default + being locked in, not price wobble. At 20% return + 0.06 vol the optimizer will over-concentrate here — this is the model's blind spot, not a real free lunch. CAP THIS SLEEVE.",
       "sourceUrl": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11137"
     },
     {
@@ -183,6 +183,17 @@
       "belowFloor": false,
       "riskNotes": "~40-50 wide-moat quality names at reasonable valuations — the quality-value bridge. Lower drawdown than SMH/ARKK; can lag in speculative rallies. Cleanest concentrated pick for risk-adjusted return. Foreign-asset tax.",
       "sourceUrl": "https://www.vaneck.com/us/en/investments/morningstar-wide-moat-etf-moat/"
+    },
+    {
+      "id": "nvda-single",
+      "name": "Nvidia (single stock)",
+      "sleeve": "concentrated",
+      "ticker": "NVDA",
+      "expectedReturn": 0.18,
+      "volatility": 0.50,
+      "belowFloor": false,
+      "riskNotes": "SINGLE STOCK — max concentration, max upside AND max wipeout risk. AI leader but valuation extreme; one company's execution/competition/regulation risk is total and undiversifiable. Can double or halve in a year. Only for a small, high-tolerance satellite. Foreign-asset tax (12.5% LTCG >24m else slab).",
+      "sourceUrl": "https://www.nvidia.com/en-us/investor-relations/"
     }
   ],
   "correlations": {

@@ -11,10 +11,10 @@ import assetsData from '~/data/assets.json'
 import { portfolioReturn, portfolioVolatility, RISK_FREE_RATE, sharpe } from '~/lib/finmath'
 import { compactInr, inr, pct } from '~/lib/format'
 import type { OptimizerOpts } from '~/lib/optimizer'
-import { flagBelowFloor, maxSharpe, minVariance, riskParity } from '~/lib/optimizer'
+import { flagBelowFloor, maxReturn, maxSharpe, minVariance, riskParity } from '~/lib/optimizer'
 import { monteCarlo, projectScenarios } from '~/lib/projection'
 import type { RiskProfile } from '~/lib/questionnaire'
-import type { Allocation, Asset, CorrelationMatrix, PortfolioStats } from '~/lib/types'
+import type { Allocation, Asset, CorrelationMatrix, PortfolioStats, Sleeve } from '~/lib/types'
 import HonestyPanel from './HonestyPanel'
 import ProjectionChart from './ProjectionChart'
 
@@ -23,12 +23,37 @@ const LS_KEY = 'oriz:portfolio-lab:questionnaire'
 const assets = assetsData.assets as Asset[]
 const corr = assetsData.correlations as CorrelationMatrix
 
-type Objective = 'maxSharpe' | 'minVariance' | 'riskParity'
+type Objective = 'maxSharpe' | 'minVariance' | 'riskParity' | 'maxReturn'
 
 const OBJ_LABELS: Record<Objective, string> = {
   maxSharpe: 'Max Sharpe',
   minVariance: 'Min Variance',
   riskParity: 'Risk Parity',
+  maxReturn: 'Max Return (aggressive)',
+}
+
+const DEFAULT_SLEEVE_CAPS: Partial<Record<Sleeve, number>> = {
+  'p2p-lending': 0.15,
+  'concentrated': 0.15,
+  'indian-equity': 0.40,
+  'global-value': 0.25,
+  'intl-equity': 0.20,
+  'gold': 0.12,
+  'reits-invits': 0.10,
+  'arbitrage': 0.15,
+  'debt-alt': 0.15,
+}
+
+const SLEEVE_CAP_LABELS: Partial<Record<Sleeve, string>> = {
+  'p2p-lending': 'P2P lending',
+  'concentrated': 'Concentrated',
+  'indian-equity': 'Indian equity',
+  'global-value': 'Global value',
+  'intl-equity': 'Intl equity',
+  'gold': 'Gold',
+  'reits-invits': 'REITs/InvITs',
+  'arbitrage': 'Arbitrage',
+  'debt-alt': 'Debt alt',
 }
 
 function getProfileFromLS(): RiskProfile {
@@ -102,6 +127,8 @@ export default function AllocationStudio() {
   const [stats, setStats] = useState<PortfolioStats | null>(null)
   const [hydrated, setHydrated] = useState(false)
   const [showMC, setShowMC] = useState(true)
+  const [sleeveCaps, setSleeveCaps] = useState<Partial<Record<Sleeve, number>>>(DEFAULT_SLEEVE_CAPS)
+  const [capsOpen, setCapsOpen] = useState(false)
 
   // Hydrate from LS / URL on mount
   useEffect(() => {
@@ -114,11 +141,16 @@ export default function AllocationStudio() {
 
   // Run optimizer when objective / includeBelowFloor / profile changes
   const runOptimizer = useCallback(() => {
-    const opts: OptimizerOpts = { includeBelowFloor, floor: 0.12 }
+    const opts: OptimizerOpts = {
+      includeBelowFloor: objective === 'maxReturn' ? true : includeBelowFloor,
+      floor: 0.12,
+      sleeveCaps,
+    }
     try {
       let result: ReturnType<typeof maxSharpe>
       if (objective === 'maxSharpe') result = maxSharpe(assets, corr, opts)
       else if (objective === 'minVariance') result = minVariance(assets, corr, opts)
+      else if (objective === 'maxReturn') result = maxReturn(assets, corr, opts)
       else result = riskParity(assets, corr, opts)
 
       setWeights(allocToWeights(result.allocation))
@@ -128,7 +160,7 @@ export default function AllocationStudio() {
       setWeights({})
       setStats(null)
     }
-  }, [objective, includeBelowFloor])
+  }, [objective, includeBelowFloor, sleeveCaps])
 
   useEffect(() => {
     if (hydrated) runOptimizer()
@@ -270,10 +302,64 @@ export default function AllocationStudio() {
               <button type="button" className="btn-reopt mono" onClick={runOptimizer}>
                 Re-run optimizer
               </button>
+
+              {/* Sleeve caps panel */}
+              <div className="caps-panel">
+                <button
+                  type="button"
+                  className="caps-toggle mono"
+                  onClick={() => setCapsOpen((o) => !o)}
+                  aria-expanded={capsOpen}
+                >
+                  {capsOpen ? '▾' : '▸'} Advanced: sleeve caps
+                </button>
+                {capsOpen && (
+                  <div className="caps-grid">
+                    {(Object.keys(DEFAULT_SLEEVE_CAPS) as Sleeve[]).map((sleeve) => (
+                      <label key={sleeve} className="cap-field">
+                        <span className="cap-label mono">{SLEEVE_CAP_LABELS[sleeve]}</span>
+                        <input
+                          type="number"
+                          className="num cap-input"
+                          min={0}
+                          max={1}
+                          step={0.05}
+                          value={sleeveCaps[sleeve] ?? 1}
+                          onChange={(e) => {
+                            const v = Number(e.target.value)
+                            if (Number.isFinite(v) && v >= 0 && v <= 1) {
+                              setSleeveCaps((prev) => ({ ...prev, [sleeve]: v }))
+                            }
+                          }}
+                        />
+                      </label>
+                    ))}
+                    <button
+                      type="button"
+                      className="btn-reopt mono caps-reset"
+                      onClick={() => setSleeveCaps(DEFAULT_SLEEVE_CAPS)}
+                    >
+                      Reset defaults
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Max Return warning */}
+      {objective === 'maxReturn' && (
+        <div className="maxret-warning" role="alert">
+          <p className="maxret-warn-text mono loss">
+            Max Return ignores risk entirely — it does not reward diversification or penalise
+            volatility. This is the aggressive preset. Never fund an aggressive portfolio with
+            borrowed money — a 50-60% drawdown plus a fixed loan EMI forces you to sell at the
+            bottom.
+          </p>
+        </div>
+      )}
 
       {/* Stats hero */}
       {liveStats && (
@@ -794,4 +880,82 @@ const studioStyles = `
 .studio-honesty {
   padding-block: 2rem 3rem;
 }
-`
+
+/* Sleeve caps panel */
+.caps-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.caps-toggle {
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  color: var(--ink-mute);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  padding: 0;
+}
+.caps-toggle:hover { color: var(--accent); }
+.caps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--rule);
+  background: color-mix(in oklab, var(--rule) 15%, transparent);
+}
+@media (min-width: 480px) {
+  .caps-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+.cap-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.cap-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mute);
+}
+.cap-input {
+  height: 32px;
+  padding: 0 0.5rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: right;
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+  width: 100%;
+}
+.cap-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: var(--accent);
+}
+.caps-reset {
+  grid-column: 1 / -1;
+  align-self: flex-start;
+  font-size: 11px;
+  height: 32px;
+  padding-inline: 0.875rem;
+}
+
+/* Max Return warning */
+.maxret-warning {
+  margin: 0;
+  padding: 0.875rem 1.25rem;
+  border: 2px solid var(--loss);
+  background: color-mix(in oklab, var(--loss) 10%, transparent);
+}
+.maxret-warn-text {
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  margin: 0;
+}`

@@ -260,3 +260,49 @@ export function riskParity(
     stats,
   }
 }
+
+/**
+ * MAX RETURN (aggressive): highest raw expected return, ignoring risk.
+ * Without sleeveCaps this trivially concentrates 100% into the single
+ * highest-return asset — so caps are essentially mandatory here. With caps,
+ * it fills from the highest-return asset down, respecting each sleeve limit.
+ * floor defaults OFF (includeBelowFloor true) — max-return means everything is
+ * on the table. THIS IS THE AGGRESSIVE PRESET: it does NOT reward
+ * diversification or penalise volatility. Pair with sleeveCaps + a strong
+ * stomach.
+ */
+export function maxReturn(
+  assets: Asset[],
+  corr: CorrelationMatrix,
+  opts: OptimizerOpts = {},
+): FrontierPoint {
+  const { riskFree = RISK_FREE_RATE, sleeveCaps, floor = 0.12, includeBelowFloor = true } = opts
+  const eligible = includeBelowFloor ? assets : assets.filter((a) => a.expectedReturn >= floor)
+  if (eligible.length === 0) throw new RangeError('No eligible assets')
+
+  const corrMatrix = buildCorrMatrix(eligible, corr)
+  // Greedy fill by descending expected return, honouring per-sleeve caps.
+  const order = eligible
+    .map((a, i) => ({ i, ret: a.expectedReturn, sleeve: a.sleeve }))
+    .sort((a, b) => b.ret - a.ret)
+  const w = new Array<number>(eligible.length).fill(0)
+  let remaining = 1
+  for (const { i, sleeve } of order) {
+    if (remaining <= 0) break
+    const cap = sleeveCaps?.[sleeve]
+    const take = cap !== undefined ? Math.min(cap, remaining) : remaining
+    w[i] = take
+    remaining -= take
+  }
+  // If caps left slack, spread the remainder proportionally to return.
+  if (remaining > 0.0001) {
+    const total = order.reduce((s, o) => s + o.ret, 0)
+    for (const { i, ret } of order) w[i] += (remaining * ret) / total
+  }
+  const nw = normalise(w)
+  const stats = computeStats(nw, eligible, corrMatrix, riskFree)
+  return {
+    allocation: eligible.map((a, i) => ({ assetId: a.id, weight: nw[i] })),
+    stats,
+  }
+}
