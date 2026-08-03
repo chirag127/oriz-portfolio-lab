@@ -1,0 +1,205 @@
+---
+import assetsData from '~/data/assets.json'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import { pct } from '~/lib/format'
+
+const assets = assetsData.assets
+const meta = assetsData._meta
+---
+
+<BaseLayout
+  title="Methodology — Portfolio Lab"
+  description="How Portfolio Lab builds max-Sharpe allocations: the math, the 12% floor, projection methodology, and the full data sourcing table."
+>
+  <div class="spine page-head">
+    <h1>Methodology</h1>
+    <p class="lede">
+      How the engine works, where the numbers come from, and why every assumption is
+      conservatively framed.
+    </p>
+  </div>
+
+  <div class="prose-spine prose">
+    <h2>Objective: max Sharpe, not max return</h2>
+    <p>
+      The optimizer maximises the <strong>Sharpe ratio</strong> — expected return minus the
+      risk-free rate, divided by portfolio volatility. Maximising raw return would push 100%
+      into the highest-forward-return asset; the Sharpe objective rewards diversification
+      because adding a low-correlation asset reduces portfolio volatility even if its own
+      return is moderate.
+    </p>
+    <p>
+      The risk-free rate used is the India 10-year G-Sec yield:
+      <span class="num">{pct(meta.risk_free_rate)}</span> (as of {meta.as_of}).
+    </p>
+    <p>
+      Implementation: 4,000 portfolios are sampled via stick-breaking (Dirichlet-ish),
+      each scored on its Sharpe ratio. The best candidate is returned. This is a Monte-Carlo
+      approximation — not an analytical closed-form solution — but 4,000 samples over
+      ≤9 assets gives a result within ~2% of the analytic optimum.
+    </p>
+
+    <h2>The 12% floor</h2>
+    <p>
+      Assets with a forward expected return below <span class="num">{pct(meta.floor)}</span>{' '}
+      are <em>excluded from the optimizer by default</em>. The studio has a toggle to include
+      them for comparison, but the default removes them so the math is never poisoned by
+      below-floor drag. The UI always flags which assets were excluded.
+    </p>
+    <p>
+      The floor is not a guarantee: the 12% Indian-equity forward is itself an estimate
+      sitting on the borderline. If earnings growth disappoints, the flexi-cap forward could
+      fall below 12% too.
+    </p>
+
+    <h2>Projection and Monte Carlo</h2>
+    <p>
+      <strong>Scenario bands</strong> use three deterministic paths:
+    </p>
+    <ul>
+      <li>Bear: <code>expectedReturn − volatility</code> (floored at −50%)</li>
+      <li>Base: <code>expectedReturn</code></li>
+      <li>Bull: <code>expectedReturn + volatility</code></li>
+    </ul>
+    <p>
+      Each path compounds a lump sum plus monthly SIP using annuity-due formula with monthly
+      sub-compounding.
+    </p>
+    <p>
+      <strong>Monte Carlo</strong> simulates 1,000 wealth paths with annual returns drawn from
+      <code>Normal(expectedReturn, volatility)</code> using a seeded deterministic PRNG
+      (mulberry32 + Box-Muller). The p10 / p50 / p90 percentile bands are shown as a cone.
+      This is NOT a fat-tailed model — equity returns in practice have negative skew and
+      excess kurtosis. The cone is conservative directionally but understates tail risk.
+    </p>
+    <p class="caveat">
+      All projections are estimates. Markets can fall 40-60%. Past returns are not a
+      guarantee of future performance.
+    </p>
+
+    <h2>Sources table</h2>
+    <p class="mono meta-note">Data as of {meta.as_of}. {meta.note}</p>
+
+    <div class="sources-table-wrap">
+      <table class="sources-table">
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th>Fwd return</th>
+            <th>Vol</th>
+            <th>Below 12%?</th>
+            <th>Risk notes</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          {assets.map((a) => (
+            <tr class={a.belowFloor ? 'row-below' : ''}>
+              <td><a href={`/assets/${a.id}/`}>{a.name}</a></td>
+              <td class="num">{pct(a.expectedReturn)}</td>
+              <td class="num">{pct(a.volatility)}</td>
+              <td class={a.belowFloor ? 'loss num' : 'gain num'}>{a.belowFloor ? 'Yes' : 'No'}</td>
+              <td class="notes-cell">{a.riskNotes}</td>
+              <td>
+                {a.sourceUrl
+                  ? <a href={a.sourceUrl} target="_blank" rel="noopener noreferrer" class="src-link mono">source</a>
+                  : '—'}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2>The honesty layer</h2>
+    <ul>
+      <li>
+        <strong>International equity (~5% INR forward)</strong> — held for geographic + currency
+        diversification, not return. Trailing figures are a US-bull + rupee-fall artifact. Vanguard
+        VCMM Jun-2026 base forecast: 4.2–6.2% USD gross before double-layer FoF fees and LTCG.
+      </li>
+      <li>
+        <strong>Gold (~11% INR forward)</strong> — the trailing 43% 1Y / 32% 3Y CAGRs are dominated
+        by a single +74.5% event in 2025. Gold has already corrected 20%+ off its Jan-2026 peak.
+        Honest forward is 10–13% INR with a wide confidence band.
+      </li>
+      <li>
+        <strong>P2P lending (~8% expected, net ~6-10%)</strong> — advertised 10–18% is
+        gross/pre-default marketing. RBI (Aug-2024) banned assured-return marketing, credit
+        guarantees, and secondary-market liquidity. Lender bears 100% of default loss. No
+        deposit insurance. Slab-taxed. Illiquid until repayment. Realistic NPA 4–12% (inferred;
+        RBI publishes no official series). Caps: ₹50L aggregate, ₹50k per borrower.
+      </li>
+      <li>
+        <strong>REITs / InvITs (~9%)</strong> — yield-driven; yield spread over G-Sec compressed
+        to &lt;150bps in 2026 (from &gt;300bps in 2021). Distribution partly return-of-capital.
+        Slab-taxed. Structurally short of 12%.
+      </li>
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .meta-note {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-mute);
+    margin-bottom: 1.25rem;
+  }
+  .caveat {
+    padding: 0.875rem 1rem;
+    border-left: 3px solid var(--loss);
+    background: color-mix(in oklab, var(--loss) 8%, transparent);
+    color: var(--ink);
+    font-size: 0.9375rem;
+    margin: 1.5rem 0;
+  }
+  .sources-table-wrap {
+    overflow-x: auto;
+    margin: 1.5rem 0 2rem;
+  }
+  .sources-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .sources-table thead th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-mute);
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    text-align: left;
+  }
+  .sources-table tbody td {
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--rule) 50%, transparent);
+    color: var(--ink);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .sources-table tbody td.num {
+    font-family: var(--font-mono);
+    font-feature-settings: 'tnum' 1, 'zero' 1, 'calt' 0;
+    white-space: nowrap;
+  }
+  .sources-table .notes-cell {
+    font-size: 12px;
+    color: var(--ink-mute);
+    max-width: 36ch;
+  }
+  .row-below td {
+    background: color-mix(in oklab, var(--loss) 4%, transparent);
+  }
+  .src-link {
+    font-size: 11px;
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .gain { color: var(--gain); }
+  .loss { color: var(--loss); }
+</style>

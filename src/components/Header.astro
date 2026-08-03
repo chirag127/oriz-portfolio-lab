@@ -1,0 +1,123 @@
+---
+/*
+ * Header — lean nav bar for portfolio-lab.
+ *
+ * Row 1 (mono caps small): `oriz · portfolio-lab` left, nav links + about right.
+ * 2px rule between rows.
+ * Row 2 (uppercase, tracked): site domain left, build date right.
+ *
+ * No FOLIO/ISSUE strip, no MultiSearch — portfolio-lab is a single-tool
+ * studio, not a catalogue site.
+ */
+
+interface Props {
+  section?: string
+}
+
+const { section = 'portfolio-lab' } = Astro.props
+
+const now = new Date()
+const month = String(now.getMonth() + 1).padStart(2, '0')
+const year = now.getFullYear()
+const BUILD_DATE = `${month} / ${year}`
+const DOMAIN = 'portfolio-lab.oriz.in'
+---
+
+<header class="hd">
+  <div class="hd-row hd-row-1 spine">
+    <a href="/" class="hd-mark mono">oriz · {section}</a>
+    <nav class="hd-controls mono" aria-label="Site navigation">
+      <a href="/questionnaire/" class="hd-ctrl">questionnaire</a>
+      <a href="/portfolio/" class="hd-ctrl">portfolio</a>
+      <a href="/methodology/" class="hd-ctrl">methodology</a>
+      <a href="/about/" class="hd-ctrl" aria-label="About">about</a>
+    </nav>
+  </div>
+  <hr class="hd-rule" aria-hidden="true" />
+  <div class="hd-row hd-row-2 spine">
+    <span class="hd-domain mono">{DOMAIN}</span>
+    <span class="hd-date mono">{BUILD_DATE}</span>
+  </div>
+  <hr class="hairline" />
+</header>
+
+<style>
+  .hd {
+    background: transparent;
+  }
+  .hd-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 32px;
+  }
+  .hd-row-1 .hd-mark {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: none;
+    font-feature-settings:
+      'tnum' 1,
+      'zero' 1,
+      'calt' 0;
+  }
+  .hd-row-1 .hd-mark:hover {
+    color: var(--accent);
+  }
+  .hd-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: lowercase;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    font-feature-settings:
+      'tnum' 1,
+      'zero' 1,
+      'calt' 0;
+  }
+  .hd-ctrl {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .hd-ctrl:hover {
+    color: var(--accent);
+  }
+
+  .hd-rule {
+    height: 2px;
+    background: var(--rule);
+    border: 0;
+    margin: 0;
+  }
+
+  .hd-row-2 .hd-domain,
+  .hd-row-2 .hd-date {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-mute);
+    font-feature-settings:
+      'tnum' 1,
+      'zero' 1,
+      'calt' 0;
+  }
+
+  @media (max-width: 600px) {
+    .hd-controls {
+      gap: 0.75rem;
+    }
+    .hd-row-2 .hd-domain,
+    .hd-row-2 .hd-date {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+  }
+</style>

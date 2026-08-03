@@ -1,0 +1,18 @@
+---
+const groups = [
+  {
+    label: 'Studio',
+    items: [
+      { href: '/', label: 'Home' },
+      { href: '/questionnaire/', label: 'Questionnaire' },
+      { href: '/portfolio/', label: 'Portfolio studio' },
+      { href: '/methodology/', label: 'Methodology' },
+    ],
+  },
+  {
+    label: 'Info',
+    items: [{ href: '/about/', label: 'About' }],
+  },
+]
+---
+{groups.map(g => (<section><h3>{g.label}</h3><ul>{g.items.map(i => <li><a href={i.href}>{i.label}</a></li>)}</ul></section>))}

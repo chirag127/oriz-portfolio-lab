@@ -1,0 +1,45 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Privacy — Portfolio Lab"
+  description="Privacy policy for Portfolio Lab. All computation is client-side; no data is collected."
+>
+  <div class="spine page-head">
+    <h1>Privacy</h1>
+    <p class="lede">Short version: nothing leaves your browser.</p>
+  </div>
+
+  <div class="prose-spine prose">
+    <p class="lede">
+      Portfolio Lab is a <strong>100% static, client-side site</strong>. All computation
+      runs in your browser.
+    </p>
+
+    <h2>What we collect</h2>
+    <p>
+      Nothing. No account. No email. No analytics (unless Cloudflare Analytics is enabled,
+      in which case only anonymous page-view counts — no personal data, no cookies).
+    </p>
+
+    <h2>Local storage</h2>
+    <p>
+      Your questionnaire answers and portfolio preferences are saved to
+      <code>localStorage</code> in your browser so you can return to your session.
+      This data never leaves your device. Clear your browser storage to remove it.
+    </p>
+
+    <h2>External resources</h2>
+    <p>
+      Google Fonts is loaded for typography (Inter Tight, Fraunces, JetBrains Mono).
+      This is the only external call made by the page. No other third-party scripts
+      are loaded.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions: <a href="https://oriz.in/contact/">oriz.in/contact</a>
+    </p>
+  </div>
+</BaseLayout>

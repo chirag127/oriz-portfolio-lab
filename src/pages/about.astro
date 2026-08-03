@@ -1,0 +1,53 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="About — Portfolio Lab"
+  description="Portfolio Lab is a free, browser-only portfolio studio for Indian investors. No sign-up, no data leaves your device."
+>
+  <div class="spine page-head">
+    <h1>About</h1>
+    <p class="lede">Free portfolio studio for Indian investors — browser-only, no account required.</p>
+  </div>
+
+  <div class="prose-spine prose">
+    <p class="lede">
+      Portfolio Lab is a tool to help you design a max-Sharpe portfolio with an honest downside
+      layer. All computation is client-side. Nothing is sent to any server.
+    </p>
+
+    <h2>What it does</h2>
+    <ul>
+      <li>Guides you through a 14-question risk profile questionnaire.</li>
+      <li>Runs a max-Sharpe optimizer over 9 Indian-market asset classes.</li>
+      <li>Lets you override weights manually and recomputes Sharpe live.</li>
+      <li>Projects bear / base / bull scenario bands and a 1,000-path Monte Carlo cone.</li>
+      <li>Flags every asset below the 12% forward-return floor in red with sourced caveats.</li>
+    </ul>
+
+    <h2>What it doesn't do</h2>
+    <ul>
+      <li>Not a robo-advisor. No account. No KYC. No order execution.</li>
+      <li>Does not store your data anywhere — not even a database on the server.</li>
+      <li>Does not make buy/sell recommendations. It shows math, not mandates.</li>
+    </ul>
+
+    <h2>Built by</h2>
+    <p>
+      <a href="https://oriz.in">Chirag Singhal</a> — part of the
+      <a href="https://oriz.in">oriz</a> family of free financial tools for India.
+    </p>
+    <p>
+      Source data: Value Research, Vanguard VCMM, RBI, LBMA, ICICIdirect.
+      See <a href="/methodology/">methodology</a> for full sourcing.
+    </p>
+
+    <hr />
+
+    <p>
+      <a href="/legal/disclaimer/">Disclaimer</a> &middot;
+      <a href="/legal/privacy/">Privacy</a>
+    </p>
+  </div>
+</BaseLayout>

@@ -1,0 +1,119 @@
+---
+/*
+ * Wordmark — `oriz` set in display serif with a cobalt hairline strike
+ * through the `z` glyph (proofreader's deletion mark, repainted to
+ * portfolio-lab cobalt). Family-anchor pattern from oriz-home; the
+ * subtitle prop is rendered in the site's accent.
+ */
+
+interface Props {
+  subtitle?: string
+  size?: number
+  href?: string | null
+  asHeading?: boolean
+}
+
+const { subtitle, size = 56, href = null, asHeading = false } = Astro.props
+const Tag = asHeading ? 'h1' : ('div' as const)
+---
+
+{
+  href ? (
+    <a class="wordmark-link" href={href} aria-label={subtitle ? `oriz / ${subtitle}` : 'oriz'}>
+      <Tag class="wordmark" style={`--wm-size: ${size}px;`}>
+        <span class="wordmark-mark">
+          <span class="wordmark-letter">o</span>
+          <span class="wordmark-letter">r</span>
+          <span class="wordmark-letter">i</span>
+          <span class="wordmark-letter wordmark-z">
+            z
+            <span class="wordmark-strike" aria-hidden="true" />
+          </span>
+        </span>
+        {subtitle && (
+          <>
+            <span class="wordmark-sep" aria-hidden="true">
+              /
+            </span>
+            <span class="wordmark-sub">{subtitle}</span>
+          </>
+        )}
+      </Tag>
+    </a>
+  ) : (
+    <Tag class="wordmark" style={`--wm-size: ${size}px;`}>
+      <span class="wordmark-mark">
+        <span class="wordmark-letter">o</span>
+        <span class="wordmark-letter">r</span>
+        <span class="wordmark-letter">i</span>
+        <span class="wordmark-letter wordmark-z">
+          z
+          <span class="wordmark-strike" aria-hidden="true" />
+        </span>
+      </span>
+      {subtitle && (
+        <>
+          <span class="wordmark-sep" aria-hidden="true">
+            /
+          </span>
+          <span class="wordmark-sub">{subtitle}</span>
+        </>
+      )}
+    </Tag>
+  )
+}
+
+<style>
+  .wordmark-link {
+    display: inline-block;
+    color: inherit;
+    text-decoration: none;
+  }
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.18em;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 36, 'SOFT' 20;
+    font-size: var(--wm-size, 56px);
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .wordmark-mark {
+    display: inline-flex;
+    align-items: baseline;
+  }
+  .wordmark-letter {
+    position: relative;
+    display: inline-block;
+  }
+  .wordmark-z {
+    padding-inline: 0.15em;
+  }
+  .wordmark-strike {
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 0.04em;
+    background: var(--accent);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  @media (max-width: 480px) {
+    .wordmark-strike {
+      height: max(1px, 0.04em);
+    }
+  }
+  .wordmark-sep {
+    margin-inline: 0.18em 0.18em;
+    color: var(--ink-mute);
+    font-weight: 400;
+  }
+  .wordmark-sub {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 400;
+  }
+</style>

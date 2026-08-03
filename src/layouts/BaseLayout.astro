@@ -1,0 +1,107 @@
+---
+/*
+ * BaseLayout — per-app shell for oriz-portfolio-lab.
+ *
+ * Head: meta/og/fonts/JsonLd + CF analytics.
+ * Body: FamilyChrome, Header, Sidebar (AppSidebarContent), main, Footer,
+ * BottomBar, ConsentBanner.
+ *
+ * No adsense — free public tool; house rule prohibits ad slots on free surfaces.
+ * No FamilySidebar tool list — portfolio-lab has 4 nav items, not a catalogue.
+ *
+ * Accent: cobalt #635BFF. Fonts: Fraunces (H1) + Inter Tight (body) +
+ * JetBrains Mono (all numerics, tnum mandatory).
+ */
+import '~/styles/global.css'
+import '~/styles/oriz-ui-overrides.css'
+import '@chirag127/astro-shell/tokens.css'
+import FamilyChrome from '@chirag127/astro-shell/components/FamilyChrome.astro'
+import BottomBar from '@chirag127/astro-chrome/BottomBar.astro'
+import ConsentBanner from '@chirag127/astro-chrome/ConsentBanner.astro'
+import Footer from '@chirag127/astro-chrome/Footer.astro'
+import Sidebar from '@chirag127/astro-chrome/Sidebar.astro'
+import AppSidebarContent from '~/components/AppSidebarContent.astro'
+import Header from '~/components/Header.astro'
+import JsonLd from '~/components/JsonLd.astro'
+import { bottomBarActions } from '~/data/bottombar-actions'
+import { SITE_CONFIG } from '~/lib/siteConfig'
+
+interface Props {
+  title?: string
+  description?: string
+  canonical?: string
+  noindex?: boolean
+  /** Page-level JSON-LD blocks appended to the default Org+WebSite+Person triple. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[]
+}
+
+const {
+  title = `${SITE_CONFIG.name} — ${SITE_CONFIG.tagline}`,
+  description = SITE_CONFIG.description,
+  canonical = `${SITE_CONFIG.origin}${Astro.url.pathname}`,
+  noindex = false,
+  jsonLd,
+} = Astro.props
+
+const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN
+const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={`${SITE_CONFIG.name} — oriz`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@chirag127" />
+    <meta name="theme-color" content="#FAFAFA" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..700,30..100&family=Inter+Tight:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <JsonLd extra={jsonLd} pageUrl={canonical} />
+
+    {
+      cfAnalyticsEnabled && beaconToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${beaconToken}"}`}
+        />
+      )
+    }
+  </head>
+  <body>
+    <FamilyChrome slug="oriz-portfolio-lab" title="Portfolio Lab" accent="#635BFF" />
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Header />
+    <Sidebar>
+      <AppSidebarContent />
+    </Sidebar>
+    <main id="main">
+      <div class="oriz-shell">
+        <div class="oriz-main"><slot /></div>
+      </div>
+    </main>
+    <Footer />
+    <BottomBar actions={bottomBarActions} />
+    <ConsentBanner />
+  </body>
+</html>

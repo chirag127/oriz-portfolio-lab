@@ -1,0 +1,34 @@
+---
+import AllocationStudio from '~/components/AllocationStudio'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Portfolio studio — Portfolio Lab"
+  description="Interactive max-Sharpe allocation studio: adjust weights, run projections, and see the honest downside of every assumption."
+>
+  <div class="spine page-head">
+    <p class="eyebrow mono">Step 2 of 2</p>
+    <h1>Portfolio studio</h1>
+    <p class="lede">
+      Max-Sharpe allocation seeded from your risk profile. Override weights with sliders;
+      stats update live. Projection shows bear / base / bull bands and a Monte Carlo cone.
+    </p>
+  </div>
+  <div class="studio-wrap">
+    <AllocationStudio client:load />
+  </div>
+</BaseLayout>
+
+<style>
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 0.75rem;
+  }
+  .studio-wrap {
+    padding-block: 2rem 4rem;
+  }
+</style>

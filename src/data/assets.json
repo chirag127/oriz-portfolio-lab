@@ -1,0 +1,118 @@
+{
+  "_meta": {
+    "note": "Forward EXPECTED returns (decimals, net of typical fees/tax where noted), NOT trailing track records. Sourced from a 13-agent web research sweep (Aug 2026), cross-checked against RBI, Vanguard VCMM, Value Research, LBMA. Trailing figures are inflated by the 2020-2025 bull; these are conservative forward planning numbers. Volatility = annualised stddev estimate. Nightly scrape.mjs refreshes market.json price levels, NOT these forward assumptions (those are reviewed manually).",
+    "risk_free_rate": 0.068,
+    "risk_free_note": "India ~10yr G-Sec, Aug 2026.",
+    "as_of": "2026-08-03",
+    "floor": 0.12
+  },
+  "assets": [
+    {
+      "id": "indian-flexicap",
+      "name": "Indian Equity — Flexi/Multi-cap",
+      "sleeve": "indian-equity",
+      "expectedReturn": 0.12,
+      "volatility": 0.16,
+      "histCagr": { "y1": 0.0356, "y3": 0.1233, "y5": 0.1192, "y10": 0.1272 },
+      "belowFloor": false,
+      "riskNotes": "Core diversified equity. Forward net of ~1.5% ER + ~12.5% LTCG sits ON the 12% line. 10Y track record (12.72%) inflated by 2020-2024 re-rating. Recent 1Y weak (+3.56%). Vol 14-20%; expect 40-60% peak-to-trough drawdown over a full cycle.",
+      "sourceUrl": "https://www.valueresearchonline.com/funds/fund-category/"
+    },
+    {
+      "id": "indian-midcap",
+      "name": "Indian Equity — Mid-cap",
+      "sleeve": "indian-equity",
+      "expectedReturn": 0.135,
+      "volatility": 0.20,
+      "histCagr": { "y3": 0.1776, "y5": 0.1594, "y10": 0.1551 },
+      "belowFloor": false,
+      "riskNotes": "Forward 13-16% pre-tax lifts blended equity above 12%. Carries 40-60% drawdown risk; sized to survive without forced sale. 2 recent flat years.",
+      "sourceUrl": "https://www.valueresearchonline.com/funds/fund-category/"
+    },
+    {
+      "id": "indian-smallcap",
+      "name": "Indian Equity — Small-cap",
+      "sleeve": "indian-equity",
+      "expectedReturn": 0.14,
+      "volatility": 0.24,
+      "histCagr": { "y3": 0.1648, "y5": 0.1532, "y10": 0.1618 },
+      "belowFloor": false,
+      "riskNotes": "Highest forward CAGR after 2 flat years (FY27 earnings-bounce tailwind). Most volatile sleeve — cap exposure for drawdown tolerance. SEBI high risk.",
+      "sourceUrl": "https://www.valueresearchonline.com/funds/fund-category/"
+    },
+    {
+      "id": "intl-us-global",
+      "name": "International Equity — US/Global FoF",
+      "sleeve": "intl-equity",
+      "expectedReturn": 0.05,
+      "volatility": 0.17,
+      "histCagr": { "y3": 0.155, "y5": 0.115 },
+      "belowFloor": true,
+      "riskNotes": "Forward only 4-6% INR net (Vanguard VCMM Jun-2026 base 4.2-6.2% USD gross, minus 1.1-2.0% double-layer FoF fees + 12.5% LTCG, plus rupee slip). Held for geographic + currency diversification, NOT return. S&P500 drawdowns -56.8% (GFC), -33.9% (2020). 30% probability of near-zero decade.",
+      "sourceUrl": "https://corporate.vanguard.com/content/corporatesite/us/en/corp/vemo/vemo-return-forecasts.html"
+    },
+    {
+      "id": "gold-etf",
+      "name": "Gold — ETF / SGB",
+      "sleeve": "gold",
+      "expectedReturn": 0.11,
+      "volatility": 0.16,
+      "histCagr": { "y1": 0.4347, "y3": 0.3237, "y5": 0.229 },
+      "belowFloor": true,
+      "riskNotes": "Trailing 43%/32%/23% are RALLY ARTIFACTS dominated by one-off +74.5% in 2025 — do NOT extrapolate. Already corrected 20%+ off Jan-2026 peak. Honest forward ~10-13% INR (9% USD base + rupee slip), wide band. Non-yielding diversifier held for negative correlation in equity drawdowns, not the 12% claim.",
+      "sourceUrl": "https://goldpricetools.com/guides/gold-price-prediction-2026"
+    },
+    {
+      "id": "reit-invit",
+      "name": "REITs / InvITs",
+      "sleeve": "reits-invits",
+      "expectedReturn": 0.09,
+      "volatility": 0.11,
+      "histCagr": { "y5": 0.09 },
+      "belowFloor": true,
+      "riskNotes": "Yield-driven: REITs 6-8%, InvITs 8-11% DISTRIBUTION (partly return-of-capital, not pure income). Forward WEAKENED in 2026 — yield spread over G-Sec compressed to <150bps (from >300bps in 2021). Slab-taxed on interest. ~7-11% pre-tax, structurally short of 12%.",
+      "sourceUrl": "https://moneyvesta.com/reits-invits-india-2026-investment-outlook/"
+    },
+    {
+      "id": "p2p-lending",
+      "name": "P2P Lending (RBI NBFC-P2P)",
+      "sleeve": "p2p-lending",
+      "expectedReturn": 0.08,
+      "volatility": 0.06,
+      "belowFloor": true,
+      "riskNotes": "CRITICAL: advertised 10-18% is GROSS/PRE-DEFAULT MARKETING, not net track record. RBI (Aug-2024) BANNED assured-return marketing, credit guarantees, secondary-market liquidity. Lender bears 100% of default loss; unsecured; NO liquidity (locked till repay); NO deposit guarantee; slab-taxed (no LTCG). Realistic net ~6-10%. RBI publishes NO official NPA time-series (4-12% inferred). Caps: ₹50L aggregate, ₹50k per borrower. Enforcement real (LenDenClub ₹1.99cr, NDX ₹1.92cr fined).",
+      "sourceUrl": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11137"
+    },
+    {
+      "id": "arbitrage",
+      "name": "Arbitrage Funds",
+      "sleeve": "arbitrage",
+      "expectedReturn": 0.065,
+      "volatility": 0.02,
+      "histCagr": { "y3": 0.07, "y5": 0.062 },
+      "belowFloor": true,
+      "riskNotes": "Cash-vs-futures carry, equity-taxed, near-zero drawdown. ~6-7% forward, compresses when volatility is low. Ballast/liquidity, not growth. Confirmed across Value Research/ICICIdirect/MySIPonline.",
+      "sourceUrl": "https://www.valueresearchonline.com/funds/2882/kotak-arbitrage-fund-regular-plan/"
+    },
+    {
+      "id": "corp-bond",
+      "name": "Corporate Bond (AAA / high-yield)",
+      "sleeve": "debt-alt",
+      "expectedReturn": 0.08,
+      "volatility": 0.04,
+      "belowFloor": true,
+      "riskNotes": "AAA 7.5-8.5%, sub-AAA high-yield 9-11% with real credit/default risk. Slab-taxed. Rate-sensitive. Caps below 12% even at the high-yield end. Ballast, not growth.",
+      "sourceUrl": "https://investmentsutras.com/top-investment-options-in-india-for-2026-where-smart-investors-are-putting-their-money/"
+    }
+  ],
+  "correlations": {
+    "indian-flexicap":  { "indian-midcap": 0.9,  "indian-smallcap": 0.85, "intl-us-global": 0.55, "gold-etf": -0.15, "reit-invit": 0.4,  "p2p-lending": 0.05, "arbitrage": 0.1,  "corp-bond": 0.2 },
+    "indian-midcap":    { "indian-smallcap": 0.92, "intl-us-global": 0.5,  "gold-etf": -0.1,  "reit-invit": 0.38, "p2p-lending": 0.05, "arbitrage": 0.1,  "corp-bond": 0.18 },
+    "indian-smallcap":  { "intl-us-global": 0.45, "gold-etf": -0.08, "reit-invit": 0.35, "p2p-lending": 0.05, "arbitrage": 0.08, "corp-bond": 0.15 },
+    "intl-us-global":   { "gold-etf": 0.05, "reit-invit": 0.3,  "p2p-lending": 0.02, "arbitrage": 0.05, "corp-bond": 0.15 },
+    "gold-etf":         { "reit-invit": 0.0,  "p2p-lending": 0.0,  "arbitrage": 0.05, "corp-bond": 0.1 },
+    "reit-invit":       { "p2p-lending": 0.1,  "arbitrage": 0.15, "corp-bond": 0.45 },
+    "p2p-lending":      { "arbitrage": 0.05, "corp-bond": 0.2 },
+    "arbitrage":        { "corp-bond": 0.25 }
+  }
+}

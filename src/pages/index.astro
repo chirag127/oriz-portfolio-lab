@@ -1,0 +1,367 @@
+---
+import marketData from '~/data/market.json'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import { inr, pct } from '~/lib/format'
+import { SITE_CONFIG } from '~/lib/siteConfig'
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: `${SITE_CONFIG.name} — oriz`,
+  url: SITE_CONFIG.origin,
+  description: SITE_CONFIG.description,
+  publisher: { '@type': 'Person', name: 'Chirag Singhal', url: 'https://oriz.in' },
+}
+
+const strips = [
+  {
+    label: 'Nifty 50',
+    value:
+      marketData.nifty50 != null
+        ? marketData.nifty50.toLocaleString('en-IN', { maximumFractionDigits: 2 })
+        : '—',
+    unit: '',
+  },
+  {
+    label: 'Gold ₹/10g',
+    value: marketData.gold_inr_10g != null ? inr(marketData.gold_inr_10g) : '—',
+    unit: '',
+  },
+  {
+    label: 'USD/INR',
+    value: marketData.usdinr != null ? marketData.usdinr.toFixed(2) : '—',
+    unit: '',
+  },
+  {
+    label: '10Y G-Sec',
+    value: marketData.gsec10y != null ? pct(marketData.gsec10y) : '—',
+    unit: '',
+  },
+]
+---
+
+<BaseLayout
+  title={`${SITE_CONFIG.name} — ${SITE_CONFIG.tagline}`}
+  description={SITE_CONFIG.description}
+  jsonLd={jsonLd}
+>
+  {/* Hero */}
+  <section class="spine hero" aria-label="Portfolio Lab">
+    <p class="eyebrow mono">oriz · portfolio-lab</p>
+    <h1 class="hero-h">Design a max risk-adjusted portfolio.</h1>
+    <p class="hero-sub">
+      Combine Indian equity, international ETFs, gold, REITs, and debt into the allocation with the
+      highest Sharpe ratio. Every assumption shows its forward return, volatility, and honest
+      downside — nothing extrapolated from a bull market.
+    </p>
+    <a href="/questionnaire/" class="btn-primary">Build my portfolio &rarr;</a>
+  </section>
+
+  {/* Market strip */}
+  <section class="spine strip-section" aria-label="Live market levels">
+    <p class="strip-label mono">Market levels — {marketData._meta.updated}</p>
+    <ul class="strip" role="list">
+      {strips.map((s) => (
+        <li class="strip-item">
+          <span class="strip-name mono">{s.label}</span>
+          <span class="strip-val num">{s.value}{s.unit}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="strip-note mono">Refreshed nightly. Forward return assumptions are manually reviewed — not auto-updated.</p>
+  </section>
+
+  {/* How it works */}
+  <section class="spine how-section" aria-label="How it works">
+    <h2 class="section-h mono">How it works</h2>
+    <ol class="how-list" role="list">
+      <li class="how-item">
+        <span class="how-num mono">01</span>
+        <div>
+          <strong>Answer questions</strong>
+          <p>Risk horizon, income stability, drawdown tolerance, experience — 14 questions that map to a risk profile.</p>
+        </div>
+      </li>
+      <li class="how-item">
+        <span class="how-num mono">02</span>
+        <div>
+          <strong>See your max-Sharpe allocation</strong>
+          <p>The engine runs 4,000 portfolio samples and returns the one with the highest return-per-unit-risk. Adjust weights manually; stats recompute live.</p>
+        </div>
+      </li>
+      <li class="how-item">
+        <span class="how-num mono">03</span>
+        <div>
+          <strong>Understand every risk</strong>
+          <p>Bear / base / bull projection bands plus a 1,000-path Monte Carlo cone. P2P and below-12% assets flagged in red with sourced caveats.</p>
+        </div>
+      </li>
+    </ol>
+    <a href="/questionnaire/" class="btn-secondary">Start questionnaire &rarr;</a>
+  </section>
+
+  {/* Honesty note */}
+  <section class="spine honesty-section" aria-label="Honesty layer">
+    <h2 class="section-h mono">What we don't hide</h2>
+    <ul class="honesty-list">
+      <li>
+        <strong>Only Indian equity clears 12% forward.</strong>{' '}
+        International equity is ~5% INR net; gold trailing 43% is a one-off 2025 rally, honest ~11%;
+        P2P advertised 10-18% is gross/pre-default — realistic net 6-10%.
+      </li>
+      <li>
+        <strong>Equity drawdowns are real.</strong>{' '}
+        Flexi/mid/small-cap carry 40-60% peak-to-trough loss potential over a full cycle.
+        The projection chart shows this in the bear band.
+      </li>
+      <li>
+        <strong>P2P has structural risks.</strong>{' '}
+        RBI (Aug-2024) banned assured-return marketing, credit guarantees, and secondary-market
+        liquidity. Lender bears 100% of default loss. No deposit guarantee.
+      </li>
+    </ul>
+    <a href="/methodology/" class="link-text mono">Full methodology and sources &rarr;</a>
+  </section>
+
+  {/* Disclaimer */}
+  <section class="spine disclaimer-section" aria-label="Disclaimer">
+    <p class="disclaimer mono">
+      Not investment advice. Forward returns are estimates; markets can fall 40-60%. Not SEBI-registered.
+      Educational only. Do your own research.
+      <a href="/legal/disclaimer/">Full disclaimer &rarr;</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 1rem;
+  }
+
+  .hero {
+    padding-block: clamp(3rem, 8vw, 4.5rem) clamp(1.5rem, 4vw, 2.5rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero-h {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 144, 'SOFT' 100;
+    font-size: clamp(2.25rem, 6vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin: 0 0 1rem;
+    max-width: 22ch;
+  }
+  .hero-sub {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--ink-mute);
+    margin: 0 0 2rem;
+    max-width: 60ch;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    height: 48px;
+    line-height: 48px;
+    padding-inline: 1.75rem;
+    background: var(--accent);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    transition: background 0.1s, border-color 0.1s;
+  }
+  .btn-primary:hover {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    height: 44px;
+    line-height: 44px;
+    padding-inline: 1.5rem;
+    background: transparent;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--rule);
+    margin-top: 1.5rem;
+  }
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Strip */
+  .strip-section {
+    padding-block: 1.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .strip-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 0.75rem;
+  }
+  .strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem 2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.5rem;
+  }
+  .strip-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .strip-name {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+  }
+  .strip-val {
+    font-size: 15px;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-feature-settings: 'tnum' 1, 'zero' 1, 'calt' 0;
+  }
+  .strip-note {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    margin: 0;
+  }
+
+  /* How it works */
+  .how-section {
+    padding-block: clamp(2rem, 5vw, 3rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-h {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-mute);
+    font-weight: 500;
+    margin: 0 0 1.5rem;
+  }
+  .how-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .how-item {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .how-num {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    font-weight: 500;
+    min-width: 2ch;
+    margin-top: 0.1em;
+  }
+  .how-item strong {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+  .how-item p {
+    margin: 0;
+    color: var(--ink-mute);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    max-width: 58ch;
+  }
+
+  /* Honesty */
+  .honesty-section {
+    padding-block: clamp(2rem, 5vw, 3rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .honesty-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+  .honesty-list li {
+    padding-left: 1rem;
+    position: relative;
+    color: var(--ink-mute);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    max-width: 68ch;
+  }
+  .honesty-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--rule);
+  }
+  .honesty-list strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .link-text {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--accent) 40%, transparent);
+    text-underline-offset: 3px;
+  }
+  .link-text:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  /* Disclaimer */
+  .disclaimer-section {
+    padding-block: 1.25rem 2rem;
+  }
+  .disclaimer {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    margin: 0;
+    max-width: 72ch;
+  }
+  .disclaimer a {
+    color: var(--ink-mute);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .disclaimer a:hover {
+    color: var(--accent);
+  }
+</style>

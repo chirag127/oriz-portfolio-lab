@@ -1,0 +1,274 @@
+---
+import assetsData from '~/data/assets.json'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import { pct } from '~/lib/format'
+import type { Asset } from '~/lib/types'
+
+export function getStaticPaths() {
+  return assetsData.assets.map((a) => ({
+    params: { slug: a.id },
+    props: { asset: a as Asset },
+  }))
+}
+
+interface Props {
+  asset: Asset
+}
+
+const { asset } = Astro.props
+const isP2P = asset.id === 'p2p-lending'
+---
+
+<BaseLayout
+  title={`${asset.name} — Portfolio Lab`}
+  description={`Forward expected return, volatility, and risk notes for ${asset.name}.`}
+>
+  <div class="spine page-head">
+    <p class="eyebrow mono"><a href="/assets/">Assets</a> &rsaquo; {asset.sleeve}</p>
+    <h1>{asset.name}</h1>
+    <p class="lede">
+      {asset.belowFloor
+        ? 'Below 12% forward floor — included only for diversification, excluded from optimizer by default.'
+        : 'Clears the 12% forward-return floor — eligible for optimizer by default.'}
+    </p>
+  </div>
+
+  <div class="spine asset-body">
+    {/* Stats strip */}
+    <div class="stat-row">
+      <div class="stat-card">
+        <span class="stat-label mono">Fwd expected return</span>
+        <span class={`stat-val num ${asset.belowFloor ? 'loss' : 'gain'}`}>{pct(asset.expectedReturn)}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label mono">Annualised volatility</span>
+        <span class="stat-val num">{pct(asset.volatility)}</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label mono">Sleeve</span>
+        <span class="stat-val mono">{asset.sleeve}</span>
+      </div>
+      {asset.belowFloor && (
+        <div class="stat-card stat-flag">
+          <span class="stat-label mono">Below floor</span>
+          <span class="stat-val loss mono">Below 12%</span>
+        </div>
+      )}
+    </div>
+
+    {/* Historical CAGR */}
+    {asset.histCagr && (
+      <section class="section">
+        <h2 class="section-h mono">Historical CAGR — trailing (not forward estimates)</h2>
+        <table class="hist-table">
+          <thead>
+            <tr>
+              {asset.histCagr.y1 != null && <th>1Y</th>}
+              {asset.histCagr.y3 != null && <th>3Y</th>}
+              {asset.histCagr.y5 != null && <th>5Y</th>}
+              {asset.histCagr.y10 != null && <th>10Y</th>}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {asset.histCagr.y1 != null && <td class="num">{pct(asset.histCagr.y1)}</td>}
+              {asset.histCagr.y3 != null && <td class="num">{pct(asset.histCagr.y3)}</td>}
+              {asset.histCagr.y5 != null && <td class="num">{pct(asset.histCagr.y5)}</td>}
+              {asset.histCagr.y10 != null && <td class="num">{pct(asset.histCagr.y10)}</td>}
+            </tr>
+          </tbody>
+        </table>
+        <p class="hist-note mono">
+          Trailing figures are inflated by the 2020-2025 bull market. Forward estimate ({pct(asset.expectedReturn)}) is used for optimization.
+        </p>
+      </section>
+    )}
+
+    {/* P2P caveat */}
+    {isP2P && (
+      <section class="section p2p-caveat" aria-label="P2P risk warning">
+        <h2 class="section-h mono loss">P2P lending — critical caveat</h2>
+        <ul>
+          <li>Advertised 10-18% is <strong>gross/pre-default marketing</strong> — not net return.</li>
+          <li>RBI (Aug-2024) <strong>banned</strong> assured-return marketing, credit guarantees, secondary-market liquidity.</li>
+          <li>Lender bears <strong>100% of default loss</strong>. No deposit insurance. No SEBI protection.</li>
+          <li>Illiquid — locked until each loan repays. No secondary market.</li>
+          <li>Slab-taxed (no LTCG benefit).</li>
+          <li>Realistic net: <strong>6-10%</strong>. RBI publishes no official NPA series; inferred 4-12%.</li>
+          <li>Caps: ₹50L aggregate across all P2P platforms, ₹50k per borrower.</li>
+          <li>Recent enforcement: LenDenClub ₹1.99Cr fine, NDX ₹1.92Cr fine.</li>
+        </ul>
+        <a href="https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11137" target="_blank" rel="noopener noreferrer" class="src-link mono">
+          RBI NBFC-P2P Master Directions &rarr;
+        </a>
+      </section>
+    )}
+
+    {/* Risk notes */}
+    <section class="section">
+      <h2 class="section-h mono">Risk notes</h2>
+      <p class="risk-notes">{asset.riskNotes}</p>
+      {asset.sourceUrl && (
+        <a href={asset.sourceUrl} target="_blank" rel="noopener noreferrer" class="src-link mono">
+          Primary source &rarr;
+        </a>
+      )}
+    </section>
+
+    <nav class="back-nav mono">
+      <a href="/methodology/">&larr; Methodology</a>
+      <a href="/portfolio/">Portfolio studio &rarr;</a>
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 0 0 0.75rem;
+  }
+  .eyebrow a {
+    color: var(--ink-mute);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .eyebrow a:hover { color: var(--accent); }
+
+  .asset-body {
+    padding-block: 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    min-width: 140px;
+  }
+  .stat-flag {
+    border-color: var(--loss);
+    background: color-mix(in oklab, var(--loss) 6%, transparent);
+  }
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-mute);
+  }
+  .stat-val {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+  }
+  .gain { color: var(--gain); }
+  .loss { color: var(--loss); }
+
+  .section-h {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-mute);
+    font-weight: 500;
+    margin: 0 0 1rem;
+  }
+  .section-h.loss { color: var(--loss); }
+
+  .hist-table {
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 0.75rem;
+  }
+  .hist-table th {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-mute);
+    font-weight: 500;
+    padding: 0.5rem 1.25rem 0.5rem 0;
+    text-align: right;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hist-table td {
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+    color: var(--ink);
+    padding: 0.75rem 1.25rem 0 0;
+    text-align: right;
+  }
+  .hist-note {
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin: 0;
+    letter-spacing: 0.04em;
+  }
+
+  .p2p-caveat {
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--loss);
+    background: color-mix(in oklab, var(--loss) 6%, transparent);
+  }
+  .p2p-caveat ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin: 0 0 1rem;
+    color: var(--ink);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .p2p-caveat strong { color: var(--loss); }
+
+  .risk-notes {
+    color: var(--ink-mute);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    max-width: 72ch;
+    margin: 0 0 1rem;
+  }
+
+  .src-link {
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .src-link:hover { text-decoration-color: var(--accent); }
+
+  .back-nav {
+    display: flex;
+    gap: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .back-nav a {
+    color: var(--ink-mute);
+    text-decoration: none;
+  }
+  .back-nav a:hover { color: var(--accent); }
+</style>

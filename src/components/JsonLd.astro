@@ -1,0 +1,103 @@
+---
+/*
+ * <JsonLd /> — schema.org JSON-LD injector.
+ *
+ * Emits an Organization + WebSite + Person triple by default; pages can
+ * append more (e.g. <BreadcrumbList>, <Article>) by passing `extra`.
+ * Multiple <script type="application/ld+json"> tags are valid per spec —
+ * we emit one per @type for clarity, all `is:inline` so Astro doesn't
+ * touch them.
+ *
+ * Family-anchor: the canonical Organization triple is hard-coded here
+ * (matches knowledge/decisions/branding/oriz-me-added-to-family.md and
+ * sites/oriz-home/src/lib/family.ts FAMILY constant).
+ */
+import { FAMILY, FAMILY_SITES } from '~/lib/family'
+
+interface Props {
+  /** Page-level JSON-LD blocks to append. Each is rendered in its own <script>. */
+  extra?: Record<string, unknown> | Record<string, unknown>[]
+  /** Override the URL stamped on Organization/WebSite. Default: Astro.url. */
+  pageUrl?: string
+}
+
+const { extra, pageUrl = `${FAMILY.rootOrigin}${Astro.url.pathname}` } = Astro.props
+
+const organization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: FAMILY.brand,
+  url: FAMILY.rootOrigin,
+  founder: {
+    '@type': 'Person',
+    name: FAMILY.operator.name,
+    url: 'https://me.oriz.in',
+    sameAs: [
+      `https://github.com/${FAMILY.operator.githubHandle}`,
+      'https://x.com/chirag127',
+      'https://linkedin.com/in/chirag127',
+    ],
+  },
+  email: `mailto:${FAMILY.operator.email}`,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: FAMILY.jurisdiction.city,
+    addressRegion: FAMILY.jurisdiction.state,
+    addressCountry: FAMILY.jurisdiction.country,
+  },
+  hasPart: FAMILY_SITES.map((s) => ({
+    '@type': 'WebSite',
+    name: s.name,
+    url: s.url,
+    description: s.tagline,
+  })),
+}
+
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'oriz',
+  url: FAMILY.rootOrigin,
+  inLanguage: 'en',
+  publisher: { '@type': 'Organization', name: FAMILY.brand, url: FAMILY.rootOrigin },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${FAMILY.rootOrigin}/search?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+}
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: FAMILY.operator.name,
+  url: 'https://me.oriz.in',
+  email: `mailto:${FAMILY.operator.email}`,
+  jobTitle: 'Software Engineer',
+  worksFor: { '@type': 'Organization', name: FAMILY.brand, url: FAMILY.rootOrigin },
+  sameAs: [
+    `https://github.com/${FAMILY.operator.githubHandle}`,
+    'https://x.com/chirag127',
+    'https://linkedin.com/in/chirag127',
+  ],
+}
+
+// Stamp pageUrl on each block (informs URL-specific consumers).
+const triple = [
+  { ...organization, mainEntityOfPage: pageUrl },
+  { ...website, mainEntityOfPage: pageUrl },
+  { ...person, mainEntityOfPage: pageUrl },
+]
+
+const extras = extra ? (Array.isArray(extra) ? extra : [extra]) : []
+---
+
+{triple.map((t) => (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(t)} />
+))}
+{extras.map((t) => (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(t)} />
+))}

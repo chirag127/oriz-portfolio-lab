@@ -1,0 +1,38 @@
+# oriz-portfolio-lab — Astro on Cloudflare Pages.
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Astro
+.astro/
+
+# Cloudflare Wrangler
+.wrangler/
+
+# Local env
+.env
+.env.local
+.env.*.local
+.env.example.lock
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+
+# TypeScript caches
+*.tsbuildinfo
+
+# env (synced via sops + age)
+.sops-age-key.txt
