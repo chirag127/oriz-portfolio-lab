@@ -9,36 +9,75 @@
   "assets": [
     {
       "id": "indian-flexicap",
-      "name": "Indian Equity — Flexi/Multi-cap",
+      "name": "Parag Parikh Flexi Cap (PPFAS) — direct growth",
       "sleeve": "indian-equity",
-      "expectedReturn": 0.12,
-      "volatility": 0.16,
-      "histCagr": { "y1": 0.0356, "y3": 0.1233, "y5": 0.1192, "y10": 0.1272 },
+      "ticker": "PPFAS-FLEXI",
+      "expectedReturn": 0.13,
+      "volatility": 0.15,
+      "histCagr": { "y3": 0.151, "y5": 0.146, "y10": 0.179 },
       "belowFloor": false,
-      "riskNotes": "Core diversified equity. Forward net of ~1.5% ER + ~12.5% LTCG sits ON the 12% line. 10Y track record (12.72%) inflated by 2020-2024 re-rating. Recent 1Y weak (+3.56%). Vol 14-20%; expect 40-60% peak-to-trough drawdown over a full cycle.",
-      "sourceUrl": "https://www.valueresearchonline.com/funds/fund-category/"
+      "riskNotes": "RIGOROUS CORE PICK. 10Y ~17.9%, ER 0.53% (below category avg), record since 2013. Holds cash (~25% at times) + REITs + some foreign — valuation-anchored, genuinely low-churn, best-in-class AMC governance (Rajeev Thakkar unitholder letters). Downside buffer matters on a loan. Watch: ~₹1.4L cr AUM + rising large-cap tilt — if it drifts to closet-index, switch to Sensex index.",
+      "sourceUrl": "https://groww.in/mutual-funds/parag-parikh-long-term-value-fund-direct-growth"
     },
     {
       "id": "indian-midcap",
-      "name": "Indian Equity — Mid-cap",
+      "name": "Mirae Asset Large & Midcap — direct growth",
       "sleeve": "indian-equity",
-      "expectedReturn": 0.135,
-      "volatility": 0.20,
-      "histCagr": { "y3": 0.1776, "y5": 0.1594, "y10": 0.1551 },
+      "ticker": "MIRAE-LMC",
+      "expectedReturn": 0.145,
+      "volatility": 0.19,
+      "histCagr": { "y5": 0.18, "y10": 0.18 },
       "belowFloor": false,
-      "riskNotes": "Forward 13-16% pre-tax lifts blended equity above 12%. Carries 40-60% drawdown risk; sized to survive without forced sale. 2 recent flat years.",
-      "sourceUrl": "https://www.valueresearchonline.com/funds/fund-category/"
+      "riskNotes": "RIGOROUS ALPHA ENGINE. Best 10Y (~18%) in large&midcap; SEBI-mandated 35% midcap = genuine active alpha, NOT closet index (large-cap-lag warning doesn't apply). ER 0.60% (under 0.66% cap). Runs since 2010. ~₹42.8k cr AUM — large&midcap tolerates scale (bloat rule is smallcap-specific).",
+      "sourceUrl": "https://www.valueresearchonline.com/funds/16563/mirae-asset-large-midcap-fund-direct-plan/"
     },
     {
       "id": "indian-smallcap",
-      "name": "Indian Equity — Small-cap",
+      "name": "Invesco India Smallcap — direct growth",
       "sleeve": "indian-equity",
-      "expectedReturn": 0.14,
+      "ticker": "INVESCO-SC",
+      "expectedReturn": 0.15,
       "volatility": 0.24,
-      "histCagr": { "y3": 0.1648, "y5": 0.1532, "y10": 0.1618 },
+      "histCagr": { "y3": 0.30, "y5": 0.32 },
       "belowFloor": false,
-      "riskNotes": "Highest forward CAGR after 2 flat years (FY27 earnings-bounce tailwind). Most volatile sleeve — cap exposure for drawdown tolerance. SEBI high risk.",
-      "sourceUrl": "https://www.valueresearchonline.com/funds/fund-category/"
+      "riskNotes": "ANTI-BLOAT SMALLCAP SATELLITE. ~₹7,580 cr AUM = nimble (under the ~₹20k cr bloat line per IIM-K 2026 alpha-decay evidence), focused <100-stock book, NOT a 200+ closet index. 5Y ~32%, ER 0.40% (below cat avg). Fund ONLY after emergency buffer (you're on a loan). SEBI high risk; 50-60% drawdowns.",
+      "sourceUrl": "https://www.valueresearchonline.com/"
+    },
+    {
+      "id": "indian-largecap-index",
+      "name": "HDFC BSE Sensex Index — direct growth",
+      "sleeve": "indian-equity",
+      "ticker": "HDFC-SENSEX",
+      "expectedReturn": 0.13,
+      "volatility": 0.14,
+      "histCagr": { "y10": 0.13 },
+      "belowFloor": false,
+      "riskNotes": "RIGOROUS PASSIVE BALLAST. Framework mandate: ~75% of active large-caps LAG benchmark post-2018 SEBI reclass -> passive only for large-cap. Sensex-30 > Nifty-50 (tighter concentration, bigger-profit-pool bluechips). Index FUND not ETF (no bid-ask/STT/demat drag). ER 0.20%, tracking error ~0.04-0.10%, ~₹8.5k cr AUM (healthy). Cheapest reliable large-cap exposure.",
+      "sourceUrl": "https://www.hdfcfund.com/explore/mutual-funds/hdfc-bse-sensex-index-fund/direct"
+    },
+    {
+      "id": "nippon-quant",
+      "name": "Nippon India Quant Fund — direct growth",
+      "sleeve": "indian-equity",
+      "ticker": "NIPPON-QUANT",
+      "expectedReturn": 0.14,
+      "volatility": 0.20,
+      "histCagr": { "y3": 0.16, "y5": 0.16 },
+      "belowFloor": false,
+      "riskNotes": "LOW-AUM QUANT from a top-4 AMC (your ask): ~₹111 cr AUM (tiny, unbloated), ER 0.45%, 3Y/5Y ~16%. Systematic factor-driven. Whipsaws when factors go cold — satellite-sized, not core. Better cost + record than ICICI Pru Quant (ER 1.50%) or newer Kotak/SBI Quant.",
+      "sourceUrl": "https://www.valueresearchonline.com/"
+    },
+    {
+      "id": "liquid-emergency",
+      "name": "Union Liquid Fund — direct growth (EMERGENCY, not growth)",
+      "sleeve": "arbitrage",
+      "ticker": "UNION-LIQUID",
+      "expectedReturn": 0.068,
+      "volatility": 0.005,
+      "belowFloor": true,
+      "riskNotes": "EMERGENCY CORPUS — fund this FIRST, SEPARATE from the ₹10L growth pot. Size = 6-9× your loan EMI. Instant redemption (AMC Instant Access, same-day IMPS ≤₹50k/day) — the one filter peers fail, exactly what emergency-on-a-loan needs. ER 0.06-0.10%, 90%+ AAA, <60d maturity, 5yr+ record. Tax-deferred vs FD. This is your loan lifeline: lets you NOT sell equities in a crash.",
+      "sourceUrl": "https://www.unionmf.com/"
+    },
     },
     {
       "id": "intl-us-global",
@@ -194,6 +233,17 @@
       "belowFloor": false,
       "riskNotes": "SINGLE STOCK — max concentration, max upside AND max wipeout risk. AI leader but valuation extreme; one company's execution/competition/regulation risk is total and undiversifiable. Can double or halve in a year. Only for a small, high-tolerance satellite. Foreign-asset tax (12.5% LTCG >24m else slab).",
       "sourceUrl": "https://www.nvidia.com/en-us/investor-relations/"
+    },
+    {
+      "id": "mstr-btc-proxy",
+      "name": "MicroStrategy / Strategy (MSTR) — BTC proxy",
+      "sleeve": "concentrated",
+      "ticker": "MSTR",
+      "expectedReturn": 0.18,
+      "volatility": 0.65,
+      "belowFloor": false,
+      "riskNotes": "TAX-EFFICIENT crypto exposure: a listed US STOCK (leveraged Bitcoin treasury), so India taxes it as FOREIGN EQUITY 12.5% LTCG (>24mo) — NOT crypto's 30% VDA + 1% TDS. Losses offsettable. Buyable on INDmoney. Reality: it's leveraged BTC — even MORE volatile than Bitcoin (can fall 70-80%), single-company + debt risk. Purest Bitcoin upside at equity tax rate, but treat as a small high-conviction sleeve. Verified: practitioner consensus §112 (Vested, INDmoney tax guides).",
+      "sourceUrl": "https://vested.blog/posts/how-to-buy-microstrategy-stock-from-india"
     }
   ],
   "correlations": {
