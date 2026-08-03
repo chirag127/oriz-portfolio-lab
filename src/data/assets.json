@@ -77,10 +77,10 @@
       "id": "p2p-lending",
       "name": "P2P Lending (RBI NBFC-P2P)",
       "sleeve": "p2p-lending",
-      "expectedReturn": 0.08,
+      "expectedReturn": 0.12,
       "volatility": 0.06,
-      "belowFloor": true,
-      "riskNotes": "CRITICAL: advertised 10-18% is GROSS/PRE-DEFAULT MARKETING, not net track record. RBI (Aug-2024) BANNED assured-return marketing, credit guarantees, secondary-market liquidity. Lender bears 100% of default loss; unsecured; NO liquidity (locked till repay); NO deposit guarantee; slab-taxed (no LTCG). Realistic net ~6-10%. RBI publishes NO official NPA time-series (4-12% inferred). Caps: ₹50L aggregate, ₹50k per borrower. Enforcement real (LenDenClub ₹1.99cr, NDX ₹1.92cr fined).",
+      "belowFloor": false,
+      "riskNotes": "ASSUMPTION: 12% expected return is a USER-SET assumption, not a verified forward number. Reality check stands: advertised 10-18% is GROSS/PRE-DEFAULT MARKETING. RBI (Aug-2024) BANNED assured-return marketing, credit guarantees, secondary-market liquidity. Lender bears 100% of default loss; unsecured; NO liquidity (locked till repay); NO deposit guarantee; slab-taxed (no LTCG). Independent research puts realistic net at ~6-10%. RBI publishes NO official NPA time-series (4-12% inferred). Caps: ₹50L aggregate, ₹50k per borrower. Enforcement real (LenDenClub ₹1.99cr, NDX ₹1.92cr fined). Vol shown low (0.06) but that HIDES tail default + illiquidity risk — do not read as truly low-risk.",
       "sourceUrl": "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11137"
     },
     {
