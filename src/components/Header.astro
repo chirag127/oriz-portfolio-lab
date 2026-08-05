@@ -1,123 +1,104 @@
 ---
 /*
- * Header — lean nav bar for portfolio-lab.
- *
- * Row 1 (mono caps small): `oriz · portfolio-lab` left, nav links + about right.
- * 2px rule between rows.
- * Row 2 (uppercase, tracked): site domain left, build date right.
- *
- * No FOLIO/ISSUE strip, no MultiSearch — portfolio-lab is a single-tool
- * studio, not a catalogue site.
+ * Header — instrument bar for the plotter. Wordmark (links oriz.in) + site
+ * mark left; nav tabs right; a mono readout strip below carrying the domain,
+ * the live risk-free rate, and the build stamp — the vernacular of a plotting
+ * instrument's status line.
  */
+import assetsData from '~/data/assets.json'
+import Wordmark from '~/components/Wordmark.astro'
 
-interface Props {
-  section?: string
-}
-
-const { section = 'portfolio-lab' } = Astro.props
-
-const now = new Date()
-const month = String(now.getMonth() + 1).padStart(2, '0')
-const year = now.getFullYear()
-const BUILD_DATE = `${month} / ${year}`
+const rf = assetsData._meta.risk_free_rate ?? 0.068
+const asOf = assetsData._meta.as_of ?? ''
 const DOMAIN = 'portfolio-lab.oriz.in'
+
+const nav = [
+  { href: '/questionnaire/', label: 'Profile' },
+  { href: '/portfolio/', label: 'Studio' },
+  { href: '/methodology/', label: 'Method' },
+  { href: '/account/', label: 'Account' },
+  { href: '/about/', label: 'About' },
+]
 ---
 
 <header class="hd">
-  <div class="hd-row hd-row-1 spine">
-    <a href="/" class="hd-mark mono">oriz · {section}</a>
-    <nav class="hd-controls mono" aria-label="Site navigation">
-      <a href="/questionnaire/" class="hd-ctrl">questionnaire</a>
-      <a href="/portfolio/" class="hd-ctrl">portfolio</a>
-      <a href="/methodology/" class="hd-ctrl">methodology</a>
-      <a href="/about/" class="hd-ctrl" aria-label="About">about</a>
+  <div class="hd-bar spine">
+    <div class="hd-brand">
+      <Wordmark href="https://oriz.in" size={22} />
+      <span class="hd-div" aria-hidden="true">/</span>
+      <a href="/" class="hd-site">portfolio&nbsp;lab</a>
+    </div>
+    <nav class="hd-nav" aria-label="Site navigation">
+      {nav.map((n) => (
+        <a href={n.href} class="hd-tab">{n.label}</a>
+      ))}
     </nav>
   </div>
-  <hr class="hd-rule" aria-hidden="true" />
-  <div class="hd-row hd-row-2 spine">
-    <span class="hd-domain mono">{DOMAIN}</span>
-    <span class="hd-date mono">{BUILD_DATE}</span>
+  <div class="hd-strip spine">
+    <span class="hd-readout">{DOMAIN}</span>
+    <span class="hd-readout hd-rf">Rf = <span class="num">{(rf * 100).toFixed(1)}%</span> · G-Sec 10Y</span>
+    <span class="hd-readout hd-asof">as of <span class="num">{asOf}</span></span>
   </div>
   <hr class="hairline" />
 </header>
 
 <style>
-  .hd {
-    background: transparent;
-  }
-  .hd-row {
+  .hd { background: color-mix(in oklab, var(--plane) 82%, transparent); backdrop-filter: blur(6px); }
+  .hd-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    height: 32px;
+    min-height: 52px;
+    padding-block: 0.5rem;
+    flex-wrap: wrap;
   }
-  .hd-row-1 .hd-mark {
+  .hd-brand { display: inline-flex; align-items: baseline; gap: 0.55rem; }
+  .hd-div { color: var(--ink-mute); font-family: var(--font-display); font-weight: 400; }
+  .hd-site {
     font-family: var(--font-mono);
     font-size: 12px;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--ink);
-    font-weight: 500;
-    text-decoration: none;
-    font-feature-settings:
-      'tnum' 1,
-      'zero' 1,
-      'calt' 0;
-  }
-  .hd-row-1 .hd-mark:hover {
-    color: var(--accent);
-  }
-  .hd-controls {
-    display: inline-flex;
-    align-items: center;
-    gap: 1.25rem;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    text-transform: lowercase;
-    letter-spacing: 0.04em;
-    color: var(--ink);
-    font-feature-settings:
-      'tnum' 1,
-      'zero' 1,
-      'calt' 0;
-  }
-  .hd-ctrl {
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .hd-ctrl:hover {
-    color: var(--accent);
-  }
-
-  .hd-rule {
-    height: 2px;
-    background: var(--rule);
-    border: 0;
-    margin: 0;
-  }
-
-  .hd-row-2 .hd-domain,
-  .hd-row-2 .hd-date {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
     color: var(--ink-mute);
-    font-feature-settings:
-      'tnum' 1,
-      'zero' 1,
-      'calt' 0;
+  }
+  .hd-site:hover { color: var(--frontier); }
+
+  .hd-nav { display: inline-flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
+  .hd-tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding: 0.35rem 0.6rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: color 0.12s, border-color 0.12s, background 0.12s;
+  }
+  .hd-tab:hover {
+    color: var(--frontier);
+    border-color: color-mix(in oklab, var(--frontier) 40%, transparent);
+    background: color-mix(in oklab, var(--frontier) 8%, transparent);
   }
 
-  @media (max-width: 600px) {
-    .hd-controls {
-      gap: 0.75rem;
-    }
-    .hd-row-2 .hd-domain,
-    .hd-row-2 .hd-date {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-    }
+  .hd-strip {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding-block: 0.4rem 0.55rem;
+  }
+  .hd-readout {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .hd-rf .num { color: var(--frontier); }
+
+  @media (max-width: 560px) {
+    .hd-tab { padding: 0.3rem 0.45rem; font-size: 11px; }
+    .hd-strip { gap: 0.9rem; }
   }
 </style>

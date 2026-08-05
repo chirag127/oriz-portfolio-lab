@@ -1,0 +1,35 @@
+---
+import AccountIsland from '~/components/AccountIsland'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Account — Portfolio Lab"
+  description="Optional sign-in to save your allocations and sync them across every oriz.in tool. The studio is fully public without an account."
+  noindex={true}
+>
+  <div class="spine page-head">
+    <p class="eyebrow mono">Optional · public-first</p>
+    <h1>Account</h1>
+    <p class="lede">
+      Everything here works without signing in. An account only saves your allocations so you
+      can reopen them on another device — one login shared across every oriz.in tool.
+    </p>
+  </div>
+
+  <div class="spine acct-wrap">
+    <AccountIsland client:only="react" />
+  </div>
+</BaseLayout>
+
+<style>
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--frontier);
+    margin: 0 0 0.75rem;
+    font-family: var(--font-mono);
+  }
+  .acct-wrap { padding-block: 2rem 4rem; max-width: 560px; }
+</style>

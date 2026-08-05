@@ -8,11 +8,12 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
   description="Interactive max-Sharpe allocation studio: adjust weights, run projections, and see the honest downside of every assumption."
 >
   <div class="spine page-head">
-    <p class="eyebrow mono">Step 2 of 2</p>
+    <p class="eyebrow mono">Step 2 of 2 · plot</p>
     <h1>Portfolio studio</h1>
     <p class="lede">
-      Max-Sharpe allocation seeded from your risk profile. Override weights with sliders;
-      stats update live. Projection shows bear / base / bull bands and a Monte Carlo cone.
+      Max-Sharpe allocation seeded from your risk profile. Drag any weight; the plot and stats
+      recompute live. The projection shows bear / base / bull bands and a Monte Carlo cone. Sign
+      in to save an allocation and reopen it anywhere.
     </p>
   </div>
   <div class="studio-wrap">
@@ -23,9 +24,9 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 <style>
   .eyebrow {
     font-size: 11px;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--ink-mute);
+    color: var(--frontier);
     margin: 0 0 0.75rem;
   }
   .studio-wrap {

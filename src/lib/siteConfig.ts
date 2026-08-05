@@ -4,9 +4,9 @@ export const SITE_CONFIG: OrizSiteConfig = {
   slug: 'portfolio-lab',
   name: 'Portfolio Lab',
   origin: 'https://portfolio-lab.oriz.in',
-  tagline: 'Design a max-Sharpe portfolio — see how every rupee compounds',
+  tagline: 'Plot the efficient frontier, find your max-Sharpe portfolio',
   description:
-    'Free browser-only portfolio studio for India: combine equity, international ETFs, gold, REITs and P2P into a max risk-adjusted-return allocation, project past + future performance, and see the honest downside of every assumption. No sign-up. No data leaves your device.',
+    'Free browser-only portfolio studio for India. Plot equity, global value, gold, REITs and debt in risk/return space, find the max-Sharpe allocation on the capital-market line, project bear/base/bull and Monte Carlo outcomes, and read the honest downside of every assumption. No sign-up needed; optional account syncs saved portfolios across devices.',
 }
 
 /** Site-specific niceties. */

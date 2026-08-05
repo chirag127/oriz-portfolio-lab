@@ -99,11 +99,12 @@ function CustomTooltip({
 export default function ProjectionChart({ scenarios, mc, showMC = true }: Props) {
   const data = mergeData(scenarios, mc)
 
-  // Cobalt + gain + loss palette (hardcoded hex as fallback since CSS vars aren't available in SVG attributes)
-  const COBALT = '#635BFF'
-  const GAIN = '#16794A'
-  const LOSS = '#9C2A2A'
-  const MUTED = '#8a90a0'
+  // Frontier teal + amber plot + coral flag palette (hardcoded hex as fallback since CSS vars aren't available in SVG attributes)
+  const COBALT = '#34E0C4'
+  const GAIN = '#34E0C4'
+  const LOSS = '#FF6B6B'
+  const MUTED = '#8B98AD'
+  const PLOT = '#F5B841'
 
   return (
     <div className="proj-chart-wrap">
@@ -183,7 +184,7 @@ export default function ProjectionChart({ scenarios, mc, showMC = true }: Props)
           <Line
             type="monotone"
             dataKey="bull"
-            stroke={GAIN}
+            stroke={PLOT}
             strokeWidth={1.5}
             dot={false}
             strokeDasharray="4 3"

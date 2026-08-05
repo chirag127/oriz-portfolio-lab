@@ -6,15 +6,13 @@
  * Body: FamilyChrome, Header, Sidebar (AppSidebarContent), main, Footer,
  * BottomBar, ConsentBanner.
  *
- * No adsense — free public tool; house rule prohibits ad slots on free surfaces.
- * No FamilySidebar tool list — portfolio-lab has 4 nav items, not a catalogue.
- *
- * Accent: cobalt #635BFF. Fonts: Fraunces (H1) + Inter Tight (body) +
- * JetBrains Mono (all numerics, tnum mandatory).
+ * Identity: "The Efficient Frontier Plotter" — dark blueprint plane, teal
+ * capital-market line, amber plotted assets. No adsense (free public tool).
+ * Fonts: Space Grotesk (display) + Sora (body) + IBM Plex Mono (data).
  */
+import '@chirag127/astro-shell/tokens.css'
 import '~/styles/global.css'
 import '~/styles/oriz-ui-overrides.css'
-import '@chirag127/astro-shell/tokens.css'
 import FamilyChrome from '@chirag127/astro-shell/components/FamilyChrome.astro'
 import BottomBar from '@chirag127/astro-chrome/BottomBar.astro'
 import ConsentBanner from '@chirag127/astro-chrome/ConsentBanner.astro'
@@ -64,7 +62,7 @@ const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
     <meta property="og:site_name" content={`${SITE_CONFIG.name} — oriz`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@chirag127" />
-    <meta name="theme-color" content="#FAFAFA" />
+    <meta name="theme-color" content="#0B1220" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -72,7 +70,7 @@ const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..700,30..100&family=Inter+Tight:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Sora:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
     />
 
     <JsonLd extra={jsonLd} pageUrl={canonical} />
@@ -89,7 +87,7 @@ const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
     }
   </head>
   <body>
-    <FamilyChrome slug="oriz-portfolio-lab" title="Portfolio Lab" accent="#635BFF" />
+    <FamilyChrome slug="oriz-portfolio-lab" title="Portfolio Lab" accent="#34E0C4" />
     <a href="#main" class="skip-link">Skip to content</a>
     <Header />
     <Sidebar>

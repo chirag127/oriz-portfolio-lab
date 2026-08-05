@@ -17,6 +17,7 @@ import type { RiskProfile } from '~/lib/questionnaire'
 import type { Allocation, Asset, CorrelationMatrix, PortfolioStats, Sleeve } from '~/lib/types'
 import HonestyPanel from './HonestyPanel'
 import ProjectionChart from './ProjectionChart'
+import SavedPortfolios, { type PortfolioSnapshot } from './SavedPortfolios'
 
 const LS_KEY = 'oriz:portfolio-lab:questionnaire'
 
@@ -221,6 +222,25 @@ export default function AllocationStudio() {
   // P2P in current allocation
   const hasP2P = (weights['p2p-lending'] ?? 0) > 0.001
   const hasBelowFloor = includeBelowFloor && activeAssets.some((x) => x.asset.belowFloor)
+
+  // Snapshot for cloud save (Clerk id → Firestore).
+  const snapshot: PortfolioSnapshot | null = useMemo(() => {
+    if (!liveStats || Object.keys(weights).length === 0) return null
+    return {
+      objective: OBJ_LABELS[objective],
+      weights,
+      expectedReturn: liveStats.expectedReturn,
+      volatility: liveStats.volatility,
+      sharpe: liveStats.sharpe,
+      horizonYears,
+    }
+  }, [liveStats, weights, objective, horizonYears])
+
+  const loadSnapshot = useCallback((s: PortfolioSnapshot) => {
+    setWeights(s.weights)
+    if (typeof s.horizonYears === 'number') setHorizonYears(s.horizonYears)
+  }, [])
+
 
   if (!hydrated) {
     return <div className="studio-loading mono">Loading studio...</div>
@@ -503,6 +523,12 @@ export default function AllocationStudio() {
         </section>
       )}
 
+      {/* Save to account (Clerk + Firestore) */}
+      <section className="studio-save spine">
+        <h2 className="section-h mono">Save &amp; sync</h2>
+        <SavedPortfolios snapshot={snapshot} onLoad={loadSnapshot} />
+      </section>
+
       {/* Honesty panel */}
       <section className="studio-honesty spine">
         <HonestyPanel belowFloor={belowFloorAssets} />
@@ -754,15 +780,15 @@ const studioStyles = `
   background: var(--rule);
 }
 .stacked-seg {
-  background: var(--accent);
+  background: var(--frontier);
   transition: width 0.3s ease;
 }
-.stacked-seg:nth-child(2) { background: color-mix(in oklab, var(--accent) 75%, var(--gain)); }
-.stacked-seg:nth-child(3) { background: color-mix(in oklab, var(--accent) 55%, var(--gain)); }
-.stacked-seg:nth-child(4) { background: color-mix(in oklab, var(--accent) 40%, var(--gain)); }
-.stacked-seg:nth-child(5) { background: color-mix(in oklab, var(--accent) 25%, var(--gain)); }
-.stacked-seg:nth-child(n+6) { background: var(--ink-mute); }
-.seg-below { background: color-mix(in oklab, var(--ink-mute) 60%, var(--rule) 40%) !important; }
+.stacked-seg:nth-child(2) { background: color-mix(in oklab, var(--frontier) 68%, var(--plot)); }
+.stacked-seg:nth-child(3) { background: color-mix(in oklab, var(--frontier) 45%, var(--plot)); }
+.stacked-seg:nth-child(4) { background: color-mix(in oklab, var(--frontier) 25%, var(--plot)); }
+.stacked-seg:nth-child(5) { background: var(--plot); }
+.stacked-seg:nth-child(n+6) { background: color-mix(in oklab, var(--plot) 60%, var(--ink-mute)); }
+.seg-below { background: color-mix(in oklab, var(--flag) 55%, var(--ink-mute) 45%) !important; }
 
 .alloc-table-wrap { overflow-x: auto; }
 .alloc-table {
@@ -879,6 +905,10 @@ const studioStyles = `
 /* Honesty */
 .studio-honesty {
   padding-block: 2rem 3rem;
+}
+.studio-save {
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--rule);
 }
 
 /* Sleeve caps panel */

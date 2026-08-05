@@ -1,9 +1,8 @@
 ---
 /*
- * Wordmark — `oriz` set in display serif with a cobalt hairline strike
- * through the `z` glyph (proofreader's deletion mark, repainted to
- * portfolio-lab cobalt). Family-anchor pattern from oriz-home; the
- * subtitle prop is rendered in the site's accent.
+ * Wordmark — `oriz` in Space Grotesk with a teal capital-market tick rising
+ * off the `z` (the plotter's signature stroke, repainted to the frontier
+ * colour). Links to https://oriz.in in chrome per family convention.
  */
 
 interface Props {
@@ -13,50 +12,30 @@ interface Props {
   asHeading?: boolean
 }
 
-const { subtitle, size = 56, href = null, asHeading = false } = Astro.props
+const { subtitle, size = 24, href = 'https://oriz.in', asHeading = false } = Astro.props
 const Tag = asHeading ? 'h1' : ('div' as const)
 ---
 
 {
   href ? (
-    <a class="wordmark-link" href={href} aria-label={subtitle ? `oriz / ${subtitle}` : 'oriz'}>
-      <Tag class="wordmark" style={`--wm-size: ${size}px;`}>
-        <span class="wordmark-mark">
-          <span class="wordmark-letter">o</span>
-          <span class="wordmark-letter">r</span>
-          <span class="wordmark-letter">i</span>
-          <span class="wordmark-letter wordmark-z">
-            z
-            <span class="wordmark-strike" aria-hidden="true" />
-          </span>
-        </span>
+    <a class="wm-link" href={href} aria-label={subtitle ? `oriz / ${subtitle}` : 'oriz.in'}>
+      <Tag class="wm" style={`--wm-size: ${size}px;`}>
+        <span class="wm-mark">oriz<span class="wm-tick" aria-hidden="true" /></span>
         {subtitle && (
           <>
-            <span class="wordmark-sep" aria-hidden="true">
-              /
-            </span>
-            <span class="wordmark-sub">{subtitle}</span>
+            <span class="wm-sep" aria-hidden="true">/</span>
+            <span class="wm-sub">{subtitle}</span>
           </>
         )}
       </Tag>
     </a>
   ) : (
-    <Tag class="wordmark" style={`--wm-size: ${size}px;`}>
-      <span class="wordmark-mark">
-        <span class="wordmark-letter">o</span>
-        <span class="wordmark-letter">r</span>
-        <span class="wordmark-letter">i</span>
-        <span class="wordmark-letter wordmark-z">
-          z
-          <span class="wordmark-strike" aria-hidden="true" />
-        </span>
-      </span>
+    <Tag class="wm" style={`--wm-size: ${size}px;`}>
+      <span class="wm-mark">oriz<span class="wm-tick" aria-hidden="true" /></span>
       {subtitle && (
         <>
-          <span class="wordmark-sep" aria-hidden="true">
-            /
-          </span>
-          <span class="wordmark-sub">{subtitle}</span>
+          <span class="wm-sep" aria-hidden="true">/</span>
+          <span class="wm-sub">{subtitle}</span>
         </>
       )}
     </Tag>
@@ -64,56 +43,42 @@ const Tag = asHeading ? 'h1' : ('div' as const)
 }
 
 <style>
-  .wordmark-link {
-    display: inline-block;
-    color: inherit;
-    text-decoration: none;
-  }
-  .wordmark {
+  .wm-link { display: inline-block; color: inherit; text-decoration: none; }
+  .wm {
     display: inline-flex;
     align-items: baseline;
-    gap: 0.18em;
+    gap: 0.4em;
     margin: 0;
     font-family: var(--font-display);
-    font-weight: 500;
-    font-variation-settings: 'opsz' 36, 'SOFT' 20;
-    font-size: var(--wm-size, 56px);
+    font-weight: 600;
+    font-size: var(--wm-size, 24px);
     line-height: 1;
-    letter-spacing: 0;
+    letter-spacing: -0.01em;
     color: var(--ink);
   }
-  .wordmark-mark {
-    display: inline-flex;
-    align-items: baseline;
-  }
-  .wordmark-letter {
-    position: relative;
-    display: inline-block;
-  }
-  .wordmark-z {
-    padding-inline: 0.15em;
-  }
-  .wordmark-strike {
+  .wm-mark { position: relative; display: inline-block; }
+  /* Ascending capital-market tick off the z. */
+  .wm-tick {
     position: absolute;
-    inset: 50% 0 auto 0;
-    height: 0.04em;
-    background: var(--accent);
-    transform: translateY(-50%);
+    right: -0.14em;
+    bottom: 0.05em;
+    width: 0.5em;
+    height: 0.5em;
+    border-bottom: 0.09em solid var(--frontier);
+    border-right: 0.09em solid var(--frontier);
+    transform: rotate(-45deg) translateY(-0.06em);
+    transform-origin: bottom right;
     pointer-events: none;
   }
-  @media (max-width: 480px) {
-    .wordmark-strike {
-      height: max(1px, 0.04em);
-    }
-  }
-  .wordmark-sep {
-    margin-inline: 0.18em 0.18em;
-    color: var(--ink-mute);
-    font-weight: 400;
-  }
-  .wordmark-sub {
-    color: var(--accent);
-    font-style: italic;
-    font-weight: 400;
+  .wm-link:hover .wm-tick { filter: drop-shadow(0 0 4px color-mix(in oklab, var(--frontier) 60%, transparent)); }
+  .wm-sep { color: var(--ink-mute); font-weight: 400; }
+  .wm-sub {
+    color: var(--frontier);
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.62em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    align-self: center;
   }
 </style>

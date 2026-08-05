@@ -1,0 +1,222 @@
+---
+/*
+ * FrontierPlot — the signature. A risk/return plane: assets plotted as amber
+ * dots, the efficient frontier as a teal curve, and the capital-market line
+ * (Sharpe tangent) sweeping up from the risk-free rate. Server-rendered SVG;
+ * one orchestrated load animation. Reduced-motion → static plotted state.
+ *
+ * Axes are illustrative (not the live optimizer), sized from the real asset
+ * universe's risk/return spread so the shape is honest to the subject.
+ */
+import assetsData from '~/data/assets.json'
+import type { Asset } from '~/lib/types'
+
+const assets = assetsData.assets as Asset[]
+const rf = assetsData._meta.risk_free_rate ?? 0.068
+
+// Plot geometry.
+const W = 720
+const H = 440
+const PAD = { l: 56, r: 24, t: 24, b: 44 }
+const plotW = W - PAD.l - PAD.r
+const plotH = H - PAD.t - PAD.b
+
+// Domain from the universe (with headroom).
+const maxVol = 0.32
+const maxRet = 0.22
+const x = (vol: number) => PAD.l + (Math.min(vol, maxVol) / maxVol) * plotW
+const y = (ret: number) => PAD.t + plotH - (Math.min(ret, maxRet) / maxRet) * plotH
+
+// Plotted asset points (dedupe by rounded coords, cap for clarity).
+const pts = assets
+  .map((a) => ({
+    id: a.id,
+    below: a.belowFloor,
+    cx: x(a.volatility),
+    cy: y(a.expectedReturn),
+  }))
+  .slice(0, 18)
+
+// Efficient-frontier curve (illustrative parabola from low-risk to high).
+const frontier: [number, number][] = []
+for (let i = 0; i <= 24; i++) {
+  const vol = 0.02 + (i / 24) * 0.26
+  const ret = 0.06 + 0.62 * Math.sqrt(vol) // concave — diminishing return for risk
+  frontier.push([x(vol), y(Math.min(ret, 0.205))])
+}
+const frontierPath = frontier
+  .map(([px, py], i) => `${i === 0 ? 'M' : 'L'}${px.toFixed(1)} ${py.toFixed(1)}`)
+  .join(' ')
+
+// Tangent (capital-market) line: from Rf on the y-axis to the tangent point.
+const rfY = y(rf)
+const tangent = { vol: 0.185, ret: 0.168 }
+const tx = x(tangent.vol)
+const ty = y(tangent.ret)
+// Extend a touch past the tangent point.
+const ex = tx + (tx - PAD.l) * 0.18
+const ey = ty - (rfY - ty) * 0.18
+const cmlLen = Math.hypot(ex - PAD.l, ey - rfY)
+---
+
+<figure class="fp" aria-label="Risk versus return plane: assets plotted as points, the efficient frontier, and the capital-market line rising from the risk-free rate through the optimal portfolio.">
+  <svg viewBox={`0 0 ${W} ${H}`} class="fp-svg" role="img" preserveAspectRatio="xMidYMid meet">
+    <!-- plot frame -->
+    <rect
+      x={PAD.l} y={PAD.t} width={plotW} height={plotH}
+      fill="none" stroke="var(--rule)" stroke-width="1"
+    />
+    <!-- gridlines -->
+    {[0.25, 0.5, 0.75].map((f) => (
+      <g class="fp-grid">
+        <line x1={PAD.l} y1={PAD.t + plotH * f} x2={PAD.l + plotW} y2={PAD.t + plotH * f} />
+        <line x1={PAD.l + plotW * f} y1={PAD.t} x2={PAD.l + plotW * f} y2={PAD.t + plotH} />
+      </g>
+    ))}
+
+    <!-- axis ticks / labels -->
+    <text x={PAD.l} y={H - 14} class="fp-axis">low risk</text>
+    <text x={PAD.l + plotW} y={H - 14} class="fp-axis" text-anchor="end">high risk &rarr;</text>
+    <text
+      x={16} y={PAD.t + 6} class="fp-axis"
+      transform={`rotate(-90 16 ${PAD.t + 6})`} text-anchor="end"
+    >&larr; return</text>
+
+    <!-- risk-free marker -->
+    <line x1={PAD.l - 5} y1={rfY} x2={PAD.l + plotW} y2={rfY} class="fp-rf" />
+    <text x={PAD.l + 6} y={rfY - 6} class="fp-rf-label">Rf {(rf * 100).toFixed(1)}%</text>
+
+    <!-- efficient frontier -->
+    <path d={frontierPath} class="fp-frontier" fill="none" pathLength="1" />
+
+    <!-- capital-market line (the Sharpe tangent) — the signature stroke -->
+    <line
+      x1={PAD.l} y1={rfY} x2={ex} y2={ey}
+      class="fp-cml"
+      pathLength="1"
+      style={`--cml-len:${cmlLen.toFixed(0)}`}
+    />
+
+    <!-- plotted assets -->
+    <g class="fp-points">
+      {pts.map((p, i) => (
+        <circle
+          cx={p.cx} cy={p.cy} r={p.below ? 3.5 : 4.5}
+          class={p.below ? 'fp-pt fp-pt-below' : 'fp-pt'}
+          style={`--i:${i}`}
+        />
+      ))}
+    </g>
+
+    <!-- tangent portfolio marker -->
+    <circle cx={tx} cy={ty} r="7" class="fp-tangent" />
+    <circle cx={tx} cy={ty} r="7" class="fp-tangent-ring" />
+    <text x={tx + 12} y={ty + 2} class="fp-tangent-label">max Sharpe</text>
+  </svg>
+  <figcaption class="fp-cap mono">
+    Every asset is a point in risk/return space. The line from Rf that just touches
+    the frontier picks the portfolio with the highest return per unit of risk.
+  </figcaption>
+</figure>
+
+<style>
+  .fp { margin: 0; width: 100%; }
+  .fp-svg { width: 100%; height: auto; display: block; }
+
+  .fp-grid line { stroke: var(--grid); stroke-width: 1; }
+  .fp-axis {
+    fill: var(--ink-mute);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  .fp-rf { stroke: var(--ink-mute); stroke-width: 1; stroke-dasharray: 2 4; }
+  .fp-rf-label {
+    fill: var(--ink-mute);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .fp-frontier {
+    stroke: var(--frontier);
+    stroke-width: 2;
+    opacity: 0.55;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    animation: fp-draw 1.4s ease 0.2s both;
+  }
+  .fp-cml {
+    stroke: var(--frontier);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: fp-draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.2s both;
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--frontier) 55%, transparent));
+  }
+
+  .fp-pt {
+    fill: var(--plot);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: fp-settle 0.5s ease both;
+    animation-delay: calc(0.35s + var(--i) * 0.045s);
+  }
+  .fp-pt-below { fill: var(--flag); opacity: 0; }
+
+  .fp-tangent {
+    fill: var(--frontier);
+    opacity: 0;
+    animation: fp-pop 0.4s ease 1.9s both;
+  }
+  .fp-tangent-ring {
+    fill: none;
+    stroke: var(--frontier);
+    stroke-width: 1.5;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: fp-ring 1.6s ease 2s infinite;
+  }
+  .fp-tangent-label {
+    fill: var(--frontier);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    animation: fp-fade 0.5s ease 2.1s both;
+  }
+
+  .fp-cap {
+    margin-top: 0.9rem;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.55;
+    color: var(--ink-mute);
+    max-width: 60ch;
+  }
+
+  @keyframes fp-draw { to { stroke-dashoffset: 0; } }
+  @keyframes fp-settle {
+    from { opacity: 0; transform: scale(0.2) translateY(-8px); }
+    to { opacity: 0.92; transform: scale(1) translateY(0); }
+  }
+  @keyframes fp-pop { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fp-fade { to { opacity: 1; } }
+  @keyframes fp-ring {
+    0% { opacity: 0.7; transform: scale(1); }
+    70% { opacity: 0; transform: scale(2.6); }
+    100% { opacity: 0; transform: scale(2.6); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fp-frontier { animation: none; stroke-dashoffset: 0; }
+    .fp-cml { animation: none; stroke-dashoffset: 0; }
+    .fp-pt, .fp-pt-below { animation: none; opacity: 0.92; }
+    .fp-tangent { animation: none; opacity: 1; }
+    .fp-tangent-ring { animation: none; opacity: 0; }
+    .fp-tangent-label { animation: none; opacity: 1; }
+  }
+</style>

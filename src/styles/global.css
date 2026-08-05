@@ -1,125 +1,146 @@
 @import 'tailwindcss';
 
+/* Unlayered override — beats the shared shell tokens.css :root (also
+ * unlayered, imported earlier) by source order. Fonts + core plane colours
+ * must win the cascade regardless of Tailwind's layer ordering. */
+:root {
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Sora', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+
 /*
- * oriz-portfolio-lab — market-studio tokens
+ * oriz-portfolio-lab — "The Efficient Frontier Plotter"
  *
- * Surface = clean paper white (#FAFAFA). Type = Fraunces (H1 only) +
- * Inter Tight (body) + JetBrains Mono (every numeric, mandatory `tnum`, `zero`).
+ * Identity: a dark drafting plane where every asset is a plotted point and
+ * the capital-market (Sharpe) line rises from the risk-free rate through the
+ * tangent portfolio. Instrument-panel surfaces on a blueprint grid.
  *
- * --accent cobalt #635BFF — focus ring, totals, H1 underline.
- * --gain   green  #16794A — positive returns, never decorative.
- * --loss   oxblood #9C2A2A — negative returns, never decorative.
- *
- * Family-anchor mapping: --paper / --ink / --ink-mute / --rule are the
- * same names oriz-home uses; values diverge per the portfolio-lab brief.
+ * Type — Space Grotesk (display / dials) + Sora (body) + IBM Plex Mono (data).
+ * Colour — teal frontier (#34E0C4) + amber plot marks (#F5B841) + coral risk
+ * (#FF6B6B) on ink-navy (#0B1220). Semantic, never decorative.
  */
 
 @theme {
-  --font-display:
-    'Fraunces', 'GT Sectra', 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
-  --font-sans:
-    'Inter Tight', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Sora', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --container-spine: 1200px;
+  --container-spine: 1220px;
   --container-prose: 720px;
 }
 
 @layer base {
   :root {
-    color-scheme: light;
+    color-scheme: dark;
 
-    /* Clean paper surface. */
-    --paper: #fafafa;
-    --paper-deep: #f0f0f2;
-    --ink: #0e1116;
-    --ink-mute: #5c6470;
-    --rule: #d8dae0; /* hairline neutral */
+    /* Fonts as :root vars too — overrides the shared shell tokens.css
+     * (which hardcodes Fraunces/Inter Tight) regardless of import order. */
+    --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+    --font-sans: 'Sora', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-    /* Token aliases for anchor-pattern compatibility. */
-    --surface: var(--paper);
+    /* Plotter plane. */
+    --plane: #0b1220;
+    --plane-2: #111a2b;
+    --panel: #0f1727;
+    --grid: #1c2740;
+    --grid-soft: #16203400;
+
+    --ink: #e6ecf5; /* chalk */
+    --ink-mute: #8b98ad;
+    --rule: #23304a;
+
+    /* Instrument signals. */
+    --frontier: #34e0c4; /* capital-market line + accents */
+    --frontier-deep: #1fb9a1;
+    --plot: #f5b841; /* plotted asset marks */
+    --flag: #ff6b6b; /* below-floor / P2P risk */
+
+    /* Semantic aliases. */
+    --accent: var(--frontier);
+    --gain: var(--frontier);
+    --loss: var(--flag);
+    --surface: var(--plane);
+    --paper: var(--plane);
+    --paper-deep: var(--plane-2);
     --muted: var(--ink-mute);
-
-    --accent: #635bff; /* cobalt — focus ring, totals, H1 underline */
-    --gain: #16794a; /* green — positive returns, never decorative */
-    --loss: #9c2a2a; /* oxblood — negative returns, never decorative */
-
-    /* Family-anchor compat — map finance-style names to portfolio equivalents. */
-    --debit: var(--loss);
-    --negative: var(--loss);
-    --positive: var(--gain);
+    --debit: var(--flag);
+    --negative: var(--flag);
+    --positive: var(--frontier);
   }
 
-  /* Dark variant. */
-  @media (prefers-color-scheme: dark) {
+  /* Light — cyanotype drafting paper. */
+  @media (prefers-color-scheme: light) {
     :root {
-      color-scheme: dark;
-      --paper: #0d0f14;
-      --paper-deep: #060709;
-      --ink: #e8eaf0;
-      --ink-mute: #8a90a0;
-      --rule: #2a2d36;
+      color-scheme: light;
+      --plane: #eef2f7;
+      --plane-2: #e2e8f1;
+      --panel: #f6f8fb;
+      --grid: #cdd8e8;
+      --ink: #0d1a2e;
+      --ink-mute: #4c5a72;
+      --rule: #c2cede;
 
-      --surface: var(--paper);
+      --frontier: #0a8f7c;
+      --frontier-deep: #0a8f7c;
+      --plot: #b5771a;
+      --flag: #c33b3b;
+
+      --accent: var(--frontier);
+      --gain: var(--frontier);
+      --loss: var(--flag);
+      --surface: var(--plane);
+      --paper: var(--plane);
+      --paper-deep: var(--plane-2);
       --muted: var(--ink-mute);
-
-      --accent: #a09cff; /* lifted cobalt for dark contrast */
-      --gain: #4ade80;
-      --loss: #f0817a;
-
-      --debit: var(--loss);
-      --negative: var(--loss);
-      --positive: var(--gain);
     }
   }
 
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
-    font-feature-settings:
-      'kern' 1,
-      'liga' 1;
+    font-feature-settings: 'kern' 1, 'liga' 1;
   }
 
   body {
-    background-color: var(--surface);
+    background-color: var(--plane);
+    /* Blueprint grid — faint, ambient, part of the plotter identity. */
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: -1px -1px;
     color: var(--ink);
     font-family: var(--font-sans);
     font-size: 16px;
-    line-height: 1.625;
+    line-height: 1.6;
     overflow-y: scroll;
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Mono utility — disable ligatures, enable tabular numerals + slashed zero.
-   * Mandatory on every numeric across the site. */
-  code,
-  kbd,
-  pre,
-  samp,
-  .mono,
-  .num {
+  code, kbd, pre, samp, .mono, .num {
     font-family: var(--font-mono);
-    font-feature-settings:
-      'tnum' 1,
-      'zero' 1,
-      'calt' 0;
+    font-feature-settings: 'tnum' 1, 'zero' 1, 'calt' 0;
   }
-
   .num {
     font-variant-numeric: tabular-nums slashed-zero;
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--accent) 30%, transparent);
+    background: color-mix(in oklab, var(--frontier) 32%, transparent);
     color: var(--ink);
   }
 
-  a {
-    color: inherit;
-    text-decoration: none;
+  a { color: inherit; text-decoration: none; }
+
+  :focus-visible {
+    outline: 2px solid var(--frontier);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
@@ -130,15 +151,13 @@
 .spine {
   max-width: var(--container-spine);
   margin-inline: auto;
-  padding-inline: clamp(1.5rem, 4vw, 2rem);
+  padding-inline: clamp(1.25rem, 4vw, 2rem);
 }
-
 .prose-spine {
   max-width: var(--container-prose);
   margin-inline: auto;
-  padding-inline: clamp(1.5rem, 4vw, 2rem);
+  padding-inline: clamp(1.25rem, 4vw, 2rem);
 }
-
 .hairline {
   height: 1px;
   background: var(--rule);
@@ -146,112 +165,65 @@
   margin: 0;
 }
 
-/* ============================================================
- * Leader-dotted TOC row — allocation table, assumptions list.
- * ============================================================ */
-
-.toc-row {
-  display: grid;
-  grid-template-columns: max-content 1fr max-content;
-  gap: 0.5rem;
-  align-items: baseline;
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: var(--ink);
+/* Axis eyebrow — vernacular of a plotted chart's axis label. */
+.axis-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--frontier);
+  margin: 0 0 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
 }
-.toc-row::after {
+.axis-label::before {
   content: '';
-  border-bottom: 1px dotted var(--rule);
-  transform: translateY(-3px);
-  grid-column: 2;
-  grid-row: 1;
-}
-.toc-row .toc-name {
-  grid-column: 1;
-  grid-row: 1;
-  background: var(--paper);
-  padding-right: 0.25rem;
-  position: relative;
-  z-index: 1;
-}
-.toc-row .toc-value {
-  grid-column: 3;
-  grid-row: 1;
-  background: var(--paper);
-  padding-left: 0.25rem;
-  position: relative;
-  z-index: 1;
-  font-variant-numeric: tabular-nums slashed-zero;
-  color: var(--ink-mute);
+  width: 22px;
+  height: 1px;
+  background: var(--frontier);
 }
 
-a.toc-row {
-  text-decoration: none;
-  color: var(--ink);
-}
-a.toc-row:hover .toc-name,
-a.toc-row:focus-visible .toc-name {
-  color: var(--accent);
-}
-a.toc-row:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
+/* Instrument panel — the recurring bordered surface. */
+.panel {
+  background: color-mix(in oklab, var(--panel) 88%, transparent);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
 }
 
 /* ============================================================
- * Double-rule totals row — portfolio summary, allocation table.
- * ============================================================ */
-
-.totals td,
-.totals th {
-  border-top: 3px double var(--ink);
-  border-bottom: 3px double var(--ink);
-  font-weight: 600;
-  padding-block: 0.6rem;
-}
-
-/* ============================================================
- * Page-head + prose.
+ * Page-head + prose
  * ============================================================ */
 
 .page-head {
-  padding-block: clamp(2rem, 6vw, 3rem) 1.25rem;
+  padding-block: clamp(2.25rem, 6vw, 3.25rem) 1.5rem;
   border-bottom: 1px solid var(--rule);
 }
 .page-head .eyebrow {
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--ink-mute);
-  margin: 0 0 0.875rem;
-  font-feature-settings:
-    'tnum' 1,
-    'zero' 1,
-    'calt' 0;
+  color: var(--frontier);
+  margin: 0 0 0.9rem;
+  font-feature-settings: 'tnum' 1, 'zero' 1, 'calt' 0;
 }
-.page-head .eyebrow a {
-  color: var(--ink-mute);
-  text-decoration: none;
-}
-.page-head .eyebrow a:hover {
-  color: var(--accent);
-}
+.page-head .eyebrow a { color: var(--ink-mute); }
+.page-head .eyebrow a:hover { color: var(--frontier); }
 .page-head h1 {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100;
-  font-size: clamp(2.25rem, 5vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  font-size: clamp(2.15rem, 5vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
   margin: 0;
   color: var(--ink);
 }
 .page-head .lede {
   margin: 1rem 0 0;
   color: var(--ink-mute);
-  font-size: 1.0625rem;
-  max-width: 60ch;
+  font-size: 1.05rem;
+  max-width: 62ch;
 }
 .page-head .meta {
   margin: 0.75rem 0 0;
@@ -260,123 +232,80 @@ a.toc-row:focus-visible {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-mute);
-  font-feature-settings:
-    'tnum' 1,
-    'zero' 1,
-    'calt' 0;
 }
 
 .prose {
   padding-block: 2.5rem 4rem;
   color: var(--ink);
-  line-height: 1.7;
-  font-size: 1.0625rem;
+  line-height: 1.72;
+  font-size: 1.05rem;
   font-family: var(--font-sans);
 }
 .prose .lede {
-  font-size: 1.1875rem;
+  font-size: 1.18rem;
   color: var(--ink);
   margin: 0 0 2rem;
 }
 .prose h2 {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-variation-settings: 'opsz' 36, 'SOFT' 50;
+  font-weight: 600;
   font-size: 1.5rem;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.01em;
   color: var(--ink);
   margin: 2.5rem 0 1rem;
 }
 .prose h3 {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 1.1875rem;
+  font-weight: 600;
+  font-size: 1.15rem;
   color: var(--ink);
-  margin: 1.75rem 0 0.625rem;
+  margin: 1.75rem 0 0.6rem;
 }
-.prose p {
-  margin: 0 0 1.25rem;
-  color: var(--ink);
-}
+.prose p { margin: 0 0 1.25rem; color: var(--ink); }
 .prose a {
-  color: var(--accent);
+  color: var(--frontier);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  text-decoration-color: color-mix(in oklab, var(--accent) 50%, transparent);
+  text-decoration-color: color-mix(in oklab, var(--frontier) 50%, transparent);
 }
-.prose a:hover {
-  text-decoration-color: var(--accent);
-}
-.prose strong {
-  color: var(--ink);
-  font-weight: 600;
-}
-.prose ul,
-.prose ol {
-  padding-left: 1.5rem;
-  margin: 0 0 1.25rem;
-}
-.prose li {
-  margin-bottom: 0.5rem;
-}
+.prose a:hover { text-decoration-color: var(--frontier); }
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose ul, .prose ol { padding-left: 1.5rem; margin: 0 0 1.25rem; }
+.prose li { margin-bottom: 0.5rem; }
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.875em;
-  padding: 0.125em 0.375em;
-  background: color-mix(in oklab, var(--rule) 30%, transparent);
+  padding: 0.125em 0.4em;
+  background: color-mix(in oklab, var(--frontier) 12%, transparent);
   color: var(--ink);
-  border-radius: 0;
-  font-feature-settings:
-    'tnum' 1,
-    'zero' 1,
-    'calt' 0;
+  border-radius: 3px;
+  font-feature-settings: 'tnum' 1, 'zero' 1, 'calt' 0;
 }
 .prose blockquote {
-  border-left: 2px solid var(--rule);
+  border-left: 2px solid var(--frontier);
   padding-left: 1rem;
   margin-left: 0;
   color: var(--ink-mute);
-  font-style: italic;
 }
-.prose hr {
-  height: 1px;
-  background: var(--rule);
-  border: 0;
-  margin: 2.5rem 0;
-}
+.prose hr { height: 1px; background: var(--rule); border: 0; margin: 2.5rem 0; }
 
-/* Skip link — visually hidden until focused. */
+/* Skip link. */
 .skip-link {
   position: absolute;
   left: -9999px;
   top: 0;
-  background: var(--accent);
-  color: var(--paper);
+  background: var(--frontier);
+  color: var(--plane);
   padding: 0.5rem 1rem;
   z-index: 100;
+  border-radius: 0 0 4px 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
 }
-.skip-link:focus {
-  left: 0;
-}
+.skip-link:focus { left: 0; }
 
-/* ============================================================
- * Return / gain / loss colour utilities — never decorative.
- * ============================================================ */
-.gain {
-  color: var(--gain);
-  font-variant-numeric: tabular-nums slashed-zero;
-}
-.loss {
-  color: var(--loss);
-  font-variant-numeric: tabular-nums slashed-zero;
-}
-
-/* Rupee glyph — stays in sans so seam against JetBrains Mono digits is
- * invisible at any size. */
-.rupee {
-  font-family: var(--font-sans);
-  font-size: 0.9em;
-  margin-right: 0.12em;
-  color: inherit;
-}
+/* Return colour utilities — never decorative. */
+.gain { color: var(--frontier); font-variant-numeric: tabular-nums slashed-zero; }
+.loss { color: var(--flag); font-variant-numeric: tabular-nums slashed-zero; }
+.rupee { font-family: var(--font-sans); font-size: 0.9em; margin-right: 0.12em; color: inherit; }

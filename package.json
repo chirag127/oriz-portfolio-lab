@@ -22,14 +22,17 @@
     "scrape": "node scripts/scrape.mjs"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.3.14",
     "@astrojs/react": "^5.0.5",
     "@astrojs/sitemap": "^3.2.0",
     "@chirag127/astro-chrome": "^0.1.5",
     "@chirag127/astro-data": "^0.1.1",
     "@chirag127/astro-shell": "^0.4.0",
     "@chirag127/oriz-ui": "^0.1.0",
+    "@clerk/clerk-react": "^5.61.3",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^6.4.7",
+    "firebase": "^12.17.1",
     "lucide-react": "^0.510.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -39,16 +42,16 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.0",
     "@biomejs/biome": "^2.4.8",
+    "@chirag127/astro-test-utils": "^0.1.1",
+    "@playwright/test": "^1.48.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "typescript": "^5.7.0",
-    "wrangler": "^4.102.0",
-    "vitest": "^2.0.0",
     "@vitest/coverage-v8": "^2.0.0",
     "@vitest/ui": "^2.0.0",
     "happy-dom": "^15.0.0",
-    "@playwright/test": "^1.48.0",
-    "@chirag127/astro-test-utils": "^0.1.1"
+    "typescript": "^5.7.0",
+    "vitest": "^2.0.0",
+    "wrangler": "^4.102.0"
   }
 }
