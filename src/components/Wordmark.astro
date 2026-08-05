@@ -1,8 +1,9 @@
 ---
 /*
- * Wordmark — `oriz` in Space Grotesk with a teal capital-market tick rising
- * off the `z` (the plotter's signature stroke, repainted to the frontier
- * colour). Links to https://oriz.in in chrome per family convention.
+ * Wordmark — `oriz` in Bricolage Grotesque with an indigo refraction beam
+ * crossing the `z`: the optics-bench signature, a single ray entering and a
+ * faint spectrum leaving. Links to https://oriz.in in chrome per family
+ * convention.
  */
 
 interface Props {
@@ -57,20 +58,26 @@ const Tag = asHeading ? 'h1' : ('div' as const)
     color: var(--ink);
   }
   .wm-mark { position: relative; display: inline-block; }
-  /* Ascending capital-market tick off the z. */
+  /* Refraction beam crossing the z — enters indigo, exits as a thin spectrum. */
   .wm-tick {
     position: absolute;
-    right: -0.14em;
-    bottom: 0.05em;
-    width: 0.5em;
-    height: 0.5em;
-    border-bottom: 0.09em solid var(--frontier);
-    border-right: 0.09em solid var(--frontier);
-    transform: rotate(-45deg) translateY(-0.06em);
-    transform-origin: bottom right;
+    right: -0.28em;
+    top: 50%;
+    width: 0.62em;
+    height: 0.14em;
+    background: linear-gradient(
+      90deg,
+      var(--frontier) 0 45%,
+      var(--spec-2) 62%,
+      var(--spec-3) 80%,
+      var(--spec-4) 100%
+    );
+    transform: translateY(-50%) rotate(-24deg);
+    transform-origin: left center;
+    border-radius: 1px;
     pointer-events: none;
   }
-  .wm-link:hover .wm-tick { filter: drop-shadow(0 0 4px color-mix(in oklab, var(--frontier) 60%, transparent)); }
+  .wm-link:hover .wm-tick { filter: drop-shadow(0 0 4px color-mix(in oklab, var(--frontier) 55%, transparent)); }
   .wm-sep { color: var(--ink-mute); font-weight: 400; }
   .wm-sub {
     color: var(--frontier);

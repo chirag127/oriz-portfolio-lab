@@ -19,13 +19,13 @@ const PUB_KEY = import.meta.env.PUBLIC_CLERK_PUBLISHABLE_KEY
 
 const clerkAppearance = {
   variables: {
-    colorPrimary: '#34e0c4',
-    colorBackground: '#0f1727',
-    colorText: '#e6ecf5',
-    colorInputBackground: '#0b1220',
-    colorInputText: '#e6ecf5',
-    borderRadius: '8px',
-    fontFamily: 'Sora, system-ui, sans-serif',
+    colorPrimary: '#3d3ae0',
+    colorBackground: '#f7f7f4',
+    colorText: '#16181d',
+    colorInputBackground: '#eceef1',
+    colorInputText: '#16181d',
+    borderRadius: '3px',
+    fontFamily: 'Spline Sans, system-ui, sans-serif',
   },
 }
 

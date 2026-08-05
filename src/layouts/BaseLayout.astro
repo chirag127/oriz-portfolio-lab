@@ -6,9 +6,10 @@
  * Body: FamilyChrome, Header, Sidebar (AppSidebarContent), main, Footer,
  * BottomBar, ConsentBanner.
  *
- * Identity: "The Efficient Frontier Plotter" — dark blueprint plane, teal
- * capital-market line, amber plotted assets. No adsense (free public tool).
- * Fonts: Space Grotesk (display) + Sora (body) + IBM Plex Mono (data).
+ * Identity: "The Optics Bench" — cool porcelain light-table, indigo capital-
+ * market beam refracting through the tangent portfolio, oxide-red plotted
+ * assets. No adsense (free public tool).
+ * Fonts: Bricolage Grotesque (display) + Spline Sans (body) + Martian Mono (data).
  */
 import '@chirag127/astro-shell/tokens.css'
 import '~/styles/global.css'
@@ -62,7 +63,7 @@ const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
     <meta property="og:site_name" content={`${SITE_CONFIG.name} — oriz`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@chirag127" />
-    <meta name="theme-color" content="#0B1220" />
+    <meta name="theme-color" content="#ECEEF1" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -70,7 +71,7 @@ const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Sora:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Spline+Sans:wght@400;500;600&family=Martian+Mono:wght@400;500;600&display=swap"
     />
 
     <JsonLd extra={jsonLd} pageUrl={canonical} />
@@ -87,7 +88,7 @@ const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
     }
   </head>
   <body>
-    <FamilyChrome slug="oriz-portfolio-lab" title="Portfolio Lab" accent="#34E0C4" />
+    <FamilyChrome slug="oriz-portfolio-lab" title="Portfolio Lab" accent="#3D3AE0" />
     <a href="#main" class="skip-link">Skip to content</a>
     <Header />
     <Sidebar>

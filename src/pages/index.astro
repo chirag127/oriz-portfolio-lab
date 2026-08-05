@@ -34,18 +34,18 @@ const strips = [
   jsonLd={jsonLd}
 >
   {/* Hero — the plot IS the thesis */}
-  <section class="hero spine" aria-label="Risk versus return, and the max-Sharpe portfolio">
+  <section class="hero spine" aria-label="Risk versus return, read as an optics bench, and the max-Sharpe portfolio">
     <div class="hero-grid">
       <div class="hero-copy">
-        <p class="axis-label">the efficient frontier · plotter</p>
+        <p class="axis-label">the optics bench · align the beam</p>
         <h1 class="hero-h">
-          The best portfolio isn't the one with the highest return. It's the one on this line.
+          The best portfolio isn't the highest return. It's where the beam grazes the line.
         </h1>
         <p class="hero-sub">
-          Plot Indian equity, global value, gold, REITs and debt in risk/return space. The
-          capital-market line from the risk-free rate picks the mix with the most return per
-          unit of risk — the max-Sharpe portfolio. Every assumption shows its forward return,
-          volatility, and honest downside.
+          Plot Indian equity, global value, gold, REITs and debt in risk/return space. A single
+          beam from the risk-free rate is swept until it just touches the efficient frontier —
+          the point it lands on is the max-Sharpe portfolio, the most return per unit of risk.
+          Every assumption shows its forward return, volatility, and honest downside.
         </p>
         <div class="hero-cta">
           <a href="/questionnaire/" class="btn-primary">Plot my portfolio</a>
@@ -60,7 +60,7 @@ const strips = [
 
   {/* Market readout */}
   <section class="strip-section spine" aria-label="Live market levels">
-    <p class="strip-label mono">Instrument readout · {marketData._meta.updated}</p>
+    <p class="strip-label mono">Bench readout · {marketData._meta.updated}</p>
     <ul class="strip" role="list">
       {strips.map((s) => (
         <li class="strip-item">
@@ -77,7 +77,7 @@ const strips = [
 
   {/* How it works — a real 3-step sequence, so numbering earns its place */}
   <section class="how-section spine" aria-label="How it works">
-    <p class="axis-label">the run</p>
+    <p class="axis-label">the reading</p>
     <ol class="how-list" role="list">
       <li class="how-item panel">
         <span class="how-num mono">01</span>
@@ -152,13 +152,13 @@ const strips = [
   }
   .hero-h {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(1.85rem, 4.4vw, 3rem);
-    line-height: 1.05;
-    letter-spacing: -0.025em;
+    font-weight: 800;
+    font-size: clamp(1.95rem, 4.6vw, 3.15rem);
+    line-height: 1.0;
+    letter-spacing: -0.035em;
     color: var(--ink);
     margin: 0 0 1.1rem;
-    max-width: 18ch;
+    max-width: 17ch;
   }
   .hero-sub {
     font-size: 1.02rem;
@@ -176,19 +176,19 @@ const strips = [
     height: 48px;
     padding-inline: 1.6rem;
     background: var(--frontier);
-    color: var(--plane);
+    color: #fff;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     border: 1px solid var(--frontier);
-    border-radius: 8px;
+    border-radius: 3px;
     transition: background 0.12s, box-shadow 0.12s, transform 0.12s;
   }
   .btn-primary:hover {
     background: var(--frontier-deep);
-    box-shadow: 0 0 0 4px color-mix(in oklab, var(--frontier) 20%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--frontier) 18%, transparent);
   }
   .btn-secondary {
     display: inline-flex;
@@ -198,12 +198,12 @@ const strips = [
     background: transparent;
     color: var(--ink);
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     border: 1px solid var(--rule);
-    border-radius: 8px;
+    border-radius: 3px;
     transition: border-color 0.12s, color 0.12s;
   }
   .btn-secondary:hover { border-color: var(--frontier); color: var(--frontier); }

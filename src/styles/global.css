@@ -4,28 +4,31 @@
  * unlayered, imported earlier) by source order. Fonts + core plane colours
  * must win the cascade regardless of Tailwind's layer ordering. */
 :root {
-  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
-  --font-sans: 'Sora', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Spline Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 
 /*
- * oriz-portfolio-lab — "The Efficient Frontier Plotter"
+ * oriz-portfolio-lab — "The Optics Bench"
  *
- * Identity: a dark drafting plane where every asset is a plotted point and
- * the capital-market (Sharpe) line rises from the risk-free rate through the
- * tangent portfolio. Instrument-panel surfaces on a blueprint grid.
+ * Identity: an analyst's light-table, not a dark screen. Risk/return is read
+ * like an optical instrument — a single indigo beam (the capital-market line)
+ * enters from the risk-free rate, strikes the tangent portfolio (a prism), and
+ * refracts into a faint spectrum. Cool porcelain surface ruled with a precision
+ * graticule; instrument-red plotted marks; graphite ink.
  *
- * Type — Space Grotesk (display / dials) + Sora (body) + IBM Plex Mono (data).
- * Colour — teal frontier (#34E0C4) + amber plot marks (#F5B841) + coral risk
- * (#FF6B6B) on ink-navy (#0B1220). Semantic, never decorative.
+ * Type — Bricolage Grotesque (display, quirky industrial) + Spline Sans (body)
+ * + Martian Mono (data / graticule labels).
+ * Colour — indigo beam (#3D3AE0) + oxide-red marks (#D8412F) on cool porcelain
+ * (#ECEEF1), graphite ink (#16181D). Semantic, never decorative.
  */
 
 @theme {
-  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
-  --font-sans: 'Sora', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-sans: 'Spline Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Martian Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --container-spine: 1220px;
   --container-prose: 720px;
@@ -33,68 +36,80 @@
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
 
     /* Fonts as :root vars too — overrides the shared shell tokens.css
      * (which hardcodes Fraunces/Inter Tight) regardless of import order. */
-    --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
-    --font-sans: 'Sora', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+    --font-sans: 'Spline Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'Martian Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-    /* Plotter plane. */
-    --plane: #0b1220;
-    --plane-2: #111a2b;
-    --panel: #0f1727;
-    --grid: #1c2740;
-    --grid-soft: #16203400;
+    /* Light-table surface. */
+    --plane: #eceef1;
+    --plane-2: #e2e5ea;
+    --panel: #f7f7f4;
+    --grid: #d8dae0;      /* graticule ruling */
+    --grid-soft: #d8dae000;
 
-    --ink: #e6ecf5; /* chalk */
-    --ink-mute: #8b98ad;
-    --rule: #23304a;
+    --ink: #16181d;       /* graphite */
+    --ink-mute: #5c6068;
+    --rule: #cbccc9;
 
     /* Instrument signals. */
-    --frontier: #34e0c4; /* capital-market line + accents */
-    --frontier-deep: #1fb9a1;
-    --plot: #f5b841; /* plotted asset marks */
-    --flag: #ff6b6b; /* below-floor / P2P risk */
+    --frontier: #3d3ae0;  /* the aligned beam / capital-market line */
+    --frontier-deep: #2b28b8;
+    --plot: #d8412f;      /* plotted asset marks (oxide red) */
+    --flag: #b5261a;      /* below-floor / P2P risk (deeper oxide) */
+
+    /* Prism spectrum — signature only. */
+    --spec-1: #3d3ae0;
+    --spec-2: #7b3ad0;
+    --spec-3: #c1348f;
+    --spec-4: #d8412f;
 
     /* Semantic aliases. */
     --accent: var(--frontier);
-    --gain: var(--frontier);
+    --gain: var(--frontier-deep);
     --loss: var(--flag);
     --surface: var(--plane);
-    --paper: var(--plane);
+    --paper: var(--panel);
     --paper-deep: var(--plane-2);
     --muted: var(--ink-mute);
     --debit: var(--flag);
     --negative: var(--flag);
-    --positive: var(--frontier);
+    --positive: var(--frontier-deep);
   }
 
-  /* Light — cyanotype drafting paper. */
-  @media (prefers-color-scheme: light) {
+  /* Dark — a night-shift bench under lamp; beam glows against slate. */
+  @media (prefers-color-scheme: dark) {
     :root {
-      color-scheme: light;
-      --plane: #eef2f7;
-      --plane-2: #e2e8f1;
-      --panel: #f6f8fb;
-      --grid: #cdd8e8;
-      --ink: #0d1a2e;
-      --ink-mute: #4c5a72;
-      --rule: #c2cede;
+      color-scheme: dark;
+      --plane: #14151a;
+      --plane-2: #1b1d24;
+      --panel: #181a21;
+      --grid: #262932;
+      --ink: #e9eaee;
+      --ink-mute: #969ba6;
+      --rule: #2c303a;
 
-      --frontier: #0a8f7c;
-      --frontier-deep: #0a8f7c;
-      --plot: #b5771a;
-      --flag: #c33b3b;
+      --frontier: #7d7bff;
+      --frontier-deep: #9a98ff;
+      --plot: #ff6a52;
+      --flag: #ff7d68;
+
+      --spec-1: #7d7bff;
+      --spec-2: #a97bff;
+      --spec-3: #ff6ec4;
+      --spec-4: #ff6a52;
 
       --accent: var(--frontier);
-      --gain: var(--frontier);
+      --gain: var(--frontier-deep);
       --loss: var(--flag);
       --surface: var(--plane);
-      --paper: var(--plane);
+      --paper: var(--panel);
       --paper-deep: var(--plane-2);
       --muted: var(--ink-mute);
+      --positive: var(--frontier-deep);
     }
   }
 
@@ -106,11 +121,14 @@
 
   body {
     background-color: var(--plane);
-    /* Blueprint grid — faint, ambient, part of the plotter identity. */
+    /* Precision graticule — a fine ruled measuring surface, denser than a
+     * blueprint grid: 8px minor ticks under a 48px major frame. */
     background-image:
       linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 40px 40px;
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+      linear-gradient(color-mix(in oklab, var(--grid) 45%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklab, var(--grid) 45%, transparent) 1px, transparent 1px);
+    background-size: 48px 48px, 48px 48px, 8px 8px, 8px 8px;
     background-position: -1px -1px;
     color: var(--ink);
     font-family: var(--font-sans);
@@ -131,7 +149,7 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--frontier) 32%, transparent);
+    background: color-mix(in oklab, var(--frontier) 26%, transparent);
     color: var(--ink);
   }
 
@@ -165,10 +183,11 @@
   margin: 0;
 }
 
-/* Axis eyebrow — vernacular of a plotted chart's axis label. */
+/* Axis eyebrow — a graticule reference label. Registration tick + reading. */
 .axis-label {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--frontier);
@@ -179,16 +198,28 @@
 }
 .axis-label::before {
   content: '';
-  width: 22px;
-  height: 1px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--frontier);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px var(--plane);
   background: var(--frontier);
 }
 
-/* Instrument panel — the recurring bordered surface. */
+/* Instrument panel — a component seated on the bench. Sharp corners, a fine
+ * bezel, and a top registration hairline instead of a floating rounded card. */
 .panel {
-  background: color-mix(in oklab, var(--panel) 88%, transparent);
+  background: var(--panel);
   border: 1px solid var(--rule);
-  border-radius: 10px;
+  border-radius: 3px;
+  position: relative;
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--frontier) 0 40px, transparent 40px);
 }
 
 /* ============================================================
@@ -201,7 +232,8 @@
 }
 .page-head .eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
+  font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--frontier);
@@ -212,10 +244,10 @@
 .page-head .eyebrow a:hover { color: var(--frontier); }
 .page-head h1 {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(2.15rem, 5vw, 3rem);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-size: clamp(2.15rem, 5vw, 3.1rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
   margin: 0;
   color: var(--ink);
 }
@@ -248,9 +280,9 @@
 }
 .prose h2 {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.5rem;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
   color: var(--ink);
   margin: 2.5rem 0 1rem;
 }
@@ -267,7 +299,7 @@
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
-  text-decoration-color: color-mix(in oklab, var(--frontier) 50%, transparent);
+  text-decoration-color: color-mix(in oklab, var(--frontier) 45%, transparent);
 }
 .prose a:hover { text-decoration-color: var(--frontier); }
 .prose strong { color: var(--ink); font-weight: 600; }
@@ -275,9 +307,9 @@
 .prose li { margin-bottom: 0.5rem; }
 .prose code {
   font-family: var(--font-mono);
-  font-size: 0.875em;
+  font-size: 0.82em;
   padding: 0.125em 0.4em;
-  background: color-mix(in oklab, var(--frontier) 12%, transparent);
+  background: color-mix(in oklab, var(--frontier) 10%, transparent);
   color: var(--ink);
   border-radius: 3px;
   font-feature-settings: 'tnum' 1, 'zero' 1, 'calt' 0;
@@ -306,6 +338,6 @@
 .skip-link:focus { left: 0; }
 
 /* Return colour utilities — never decorative. */
-.gain { color: var(--frontier); font-variant-numeric: tabular-nums slashed-zero; }
+.gain { color: var(--frontier-deep); font-variant-numeric: tabular-nums slashed-zero; }
 .loss { color: var(--flag); font-variant-numeric: tabular-nums slashed-zero; }
 .rupee { font-family: var(--font-sans); font-size: 0.9em; margin-right: 0.12em; color: inherit; }

@@ -1,9 +1,12 @@
 ---
 /*
- * FrontierPlot — the signature. A risk/return plane: assets plotted as amber
- * dots, the efficient frontier as a teal curve, and the capital-market line
- * (Sharpe tangent) sweeping up from the risk-free rate. Server-rendered SVG;
- * one orchestrated load animation. Reduced-motion → static plotted state.
+ * FrontierPlot — the signature: an optics bench reading of risk/return. Assets
+ * are oxide-red marks on a porcelain plane; the efficient frontier is a faint
+ * graphite curve; the capital-market line is a single indigo BEAM rising from
+ * the risk-free rate, striking the tangent portfolio (a prism glyph) and
+ * refracting into a thin spectrum fan. Server-rendered SVG; one orchestrated
+ * load (beam extends -> prism lights -> spectrum blooms). Reduced-motion ->
+ * static aligned state.
  *
  * Axes are illustrative (not the live optimizer), sized from the real asset
  * universe's risk/return spread so the shape is honest to the subject.
@@ -17,7 +20,7 @@ const rf = assetsData._meta.risk_free_rate ?? 0.068
 // Plot geometry.
 const W = 720
 const H = 440
-const PAD = { l: 56, r: 24, t: 24, b: 44 }
+const PAD = { l: 58, r: 26, t: 28, b: 46 }
 const plotW = W - PAD.l - PAD.r
 const plotH = H - PAD.t - PAD.b
 
@@ -27,7 +30,7 @@ const maxRet = 0.22
 const x = (vol: number) => PAD.l + (Math.min(vol, maxVol) / maxVol) * plotW
 const y = (ret: number) => PAD.t + plotH - (Math.min(ret, maxRet) / maxRet) * plotH
 
-// Plotted asset points (dedupe by rounded coords, cap for clarity).
+// Plotted asset points (cap for clarity).
 const pts = assets
   .map((a) => ({
     id: a.id,
@@ -48,26 +51,38 @@ const frontierPath = frontier
   .map(([px, py], i) => `${i === 0 ? 'M' : 'L'}${px.toFixed(1)} ${py.toFixed(1)}`)
   .join(' ')
 
-// Tangent (capital-market) line: from Rf on the y-axis to the tangent point.
+// Capital-market beam: from Rf on the y-axis to the tangent point.
 const rfY = y(rf)
 const tangent = { vol: 0.185, ret: 0.168 }
 const tx = x(tangent.vol)
 const ty = y(tangent.ret)
-// Extend a touch past the tangent point.
-const ex = tx + (tx - PAD.l) * 0.18
-const ey = ty - (rfY - ty) * 0.18
-const cmlLen = Math.hypot(ex - PAD.l, ey - rfY)
+const cmlLen = Math.hypot(tx - PAD.l, ty - rfY)
+
+// Spectrum fan — thin rays leaving the prism at spreading angles.
+const beamAngle = Math.atan2(ty - rfY, tx - PAD.l)
+const fanLen = 118
+const specColors = ['var(--spec-1)', 'var(--spec-2)', 'var(--spec-3)', 'var(--spec-4)']
+const fan = specColors.map((c, i) => {
+  const spread = (i - 1.5) * 0.09 // radians offset around the incident angle
+  const a = beamAngle + spread
+  return {
+    c,
+    x2: (tx + Math.cos(a) * fanLen).toFixed(1),
+    y2: (ty + Math.sin(a) * fanLen).toFixed(1),
+    i,
+  }
+})
 ---
 
-<figure class="fp" aria-label="Risk versus return plane: assets plotted as points, the efficient frontier, and the capital-market line rising from the risk-free rate through the optimal portfolio.">
+<figure class="fp" aria-label="Risk versus return read as an optics bench: assets plotted as marks, the efficient frontier, and the capital-market beam rising from the risk-free rate through the tangent portfolio, where it refracts into a spectrum.">
   <svg viewBox={`0 0 ${W} ${H}`} class="fp-svg" role="img" preserveAspectRatio="xMidYMid meet">
     <!-- plot frame -->
     <rect
       x={PAD.l} y={PAD.t} width={plotW} height={plotH}
       fill="none" stroke="var(--rule)" stroke-width="1"
     />
-    <!-- gridlines -->
-    {[0.25, 0.5, 0.75].map((f) => (
+    <!-- graticule -->
+    {[0.2, 0.4, 0.6, 0.8].map((f) => (
       <g class="fp-grid">
         <line x1={PAD.l} y1={PAD.t + plotH * f} x2={PAD.l + plotW} y2={PAD.t + plotH * f} />
         <line x1={PAD.l + plotW * f} y1={PAD.t} x2={PAD.l + plotW * f} y2={PAD.t + plotH} />
@@ -86,12 +101,22 @@ const cmlLen = Math.hypot(ex - PAD.l, ey - rfY)
     <line x1={PAD.l - 5} y1={rfY} x2={PAD.l + plotW} y2={rfY} class="fp-rf" />
     <text x={PAD.l + 6} y={rfY - 6} class="fp-rf-label">Rf {(rf * 100).toFixed(1)}%</text>
 
-    <!-- efficient frontier -->
+    <!-- efficient frontier (faint graphite) -->
     <path d={frontierPath} class="fp-frontier" fill="none" pathLength="1" />
 
-    <!-- capital-market line (the Sharpe tangent) — the signature stroke -->
+    <!-- spectrum fan leaving the prism (drawn under the beam) -->
+    <g class="fp-fan">
+      {fan.map((r) => (
+        <line
+          x1={tx} y1={ty} x2={r.x2} y2={r.y2}
+          class="fp-ray" stroke={r.c} style={`--r:${r.i}`}
+        />
+      ))}
+    </g>
+
+    <!-- capital-market beam (the incident indigo ray) — the signature stroke -->
     <line
-      x1={PAD.l} y1={rfY} x2={ex} y2={ey}
+      x1={PAD.l} y1={rfY} x2={tx} y2={ty}
       class="fp-cml"
       pathLength="1"
       style={`--cml-len:${cmlLen.toFixed(0)}`}
@@ -100,22 +125,26 @@ const cmlLen = Math.hypot(ex - PAD.l, ey - rfY)
     <!-- plotted assets -->
     <g class="fp-points">
       {pts.map((p, i) => (
-        <circle
-          cx={p.cx} cy={p.cy} r={p.below ? 3.5 : 4.5}
+        <rect
+          x={p.cx - (p.below ? 3 : 3.5)} y={p.cy - (p.below ? 3 : 3.5)}
+          width={p.below ? 6 : 7} height={p.below ? 6 : 7}
           class={p.below ? 'fp-pt fp-pt-below' : 'fp-pt'}
           style={`--i:${i}`}
         />
       ))}
     </g>
 
-    <!-- tangent portfolio marker -->
-    <circle cx={tx} cy={ty} r="7" class="fp-tangent" />
-    <circle cx={tx} cy={ty} r="7" class="fp-tangent-ring" />
-    <text x={tx + 12} y={ty + 2} class="fp-tangent-label">max Sharpe</text>
+    <!-- tangent portfolio marker: a prism (triangle) sitting on the beam -->
+    <polygon
+      points={`${tx},${ty - 9} ${tx + 8},${ty + 6} ${tx - 8},${ty + 6}`}
+      class="fp-prism"
+    />
+    <text x={tx + 14} y={ty - 6} class="fp-tangent-label">max Sharpe</text>
   </svg>
   <figcaption class="fp-cap mono">
-    Every asset is a point in risk/return space. The line from Rf that just touches
-    the frontier picks the portfolio with the highest return per unit of risk.
+    Every asset is a mark in risk/return space. The beam from Rf that just grazes the
+    frontier picks the portfolio with the most return per unit of risk — where it lands, it
+    refracts.
   </figcaption>
 </figure>
 
@@ -127,33 +156,44 @@ const cmlLen = Math.hypot(ex - PAD.l, ey - rfY)
   .fp-axis {
     fill: var(--ink-mute);
     font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
-  .fp-rf { stroke: var(--ink-mute); stroke-width: 1; stroke-dasharray: 2 4; }
+  .fp-rf { stroke: var(--ink-mute); stroke-width: 1; stroke-dasharray: 2 4; opacity: 0.7; }
   .fp-rf-label {
     fill: var(--ink-mute);
     font-family: var(--font-mono);
     font-size: 10px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
   }
 
   .fp-frontier {
-    stroke: var(--frontier);
-    stroke-width: 2;
-    opacity: 0.55;
+    stroke: var(--ink-mute);
+    stroke-width: 1.5;
+    opacity: 0.4;
     stroke-dasharray: 1;
     stroke-dashoffset: 0;
     animation: fp-draw 1.4s ease 0.2s both;
   }
   .fp-cml {
     stroke: var(--frontier);
-    stroke-width: 2.5;
+    stroke-width: 3;
     stroke-linecap: round;
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    animation: fp-draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.2s both;
-    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--frontier) 55%, transparent));
+    animation: fp-draw 0.95s cubic-bezier(0.16, 1, 0.3, 1) 1.1s both;
+    filter: drop-shadow(0 0 5px color-mix(in oklab, var(--frontier) 45%, transparent));
+  }
+
+  .fp-ray {
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: 0 0;
+    animation: fp-bloom 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(2.05s + var(--r) * 0.08s);
   }
 
   .fp-pt {
@@ -164,59 +204,54 @@ const cmlLen = Math.hypot(ex - PAD.l, ey - rfY)
     animation: fp-settle 0.5s ease both;
     animation-delay: calc(0.35s + var(--i) * 0.045s);
   }
-  .fp-pt-below { fill: var(--flag); opacity: 0; }
+  .fp-pt-below { fill: none; stroke: var(--flag); stroke-width: 1.4; opacity: 0; }
 
-  .fp-tangent {
-    fill: var(--frontier);
-    opacity: 0;
-    animation: fp-pop 0.4s ease 1.9s both;
-  }
-  .fp-tangent-ring {
-    fill: none;
+  .fp-prism {
+    fill: color-mix(in oklab, var(--frontier) 22%, var(--panel));
     stroke: var(--frontier);
-    stroke-width: 1.5;
+    stroke-width: 1.75;
+    stroke-linejoin: round;
     opacity: 0;
     transform-box: fill-box;
     transform-origin: center;
-    animation: fp-ring 1.6s ease 2s infinite;
+    animation: fp-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1) 1.95s both;
   }
   .fp-tangent-label {
     fill: var(--frontier);
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10px;
+    font-weight: 600;
     letter-spacing: 0.08em;
+    text-transform: uppercase;
     opacity: 0;
-    animation: fp-fade 0.5s ease 2.1s both;
+    animation: fp-fade 0.5s ease 2.2s both;
   }
 
   .fp-cap {
     margin-top: 0.9rem;
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    line-height: 1.55;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    line-height: 1.65;
     color: var(--ink-mute);
-    max-width: 60ch;
+    max-width: 62ch;
   }
 
   @keyframes fp-draw { to { stroke-dashoffset: 0; } }
   @keyframes fp-settle {
     from { opacity: 0; transform: scale(0.2) translateY(-8px); }
-    to { opacity: 0.92; transform: scale(1) translateY(0); }
+    to { opacity: 0.95; transform: scale(1) translateY(0); }
   }
-  @keyframes fp-pop { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes fp-bloom { from { opacity: 0; transform: scaleX(0.15); } to { opacity: 0.85; transform: scaleX(1); } }
+  @keyframes fp-pop { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
   @keyframes fp-fade { to { opacity: 1; } }
-  @keyframes fp-ring {
-    0% { opacity: 0.7; transform: scale(1); }
-    70% { opacity: 0; transform: scale(2.6); }
-    100% { opacity: 0; transform: scale(2.6); }
-  }
 
   @media (prefers-reduced-motion: reduce) {
     .fp-frontier { animation: none; stroke-dashoffset: 0; }
     .fp-cml { animation: none; stroke-dashoffset: 0; }
-    .fp-pt, .fp-pt-below { animation: none; opacity: 0.92; }
-    .fp-tangent { animation: none; opacity: 1; }
-    .fp-tangent-ring { animation: none; opacity: 0; }
+    .fp-ray { animation: none; opacity: 0.85; transform: none; }
+    .fp-pt { animation: none; opacity: 0.95; }
+    .fp-pt-below { animation: none; opacity: 0.9; }
+    .fp-prism { animation: none; opacity: 1; transform: none; }
     .fp-tangent-label { animation: none; opacity: 1; }
   }
 </style>

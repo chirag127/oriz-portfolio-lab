@@ -1,9 +1,8 @@
 ---
 /*
- * Header — instrument bar for the plotter. Wordmark (links oriz.in) + site
- * mark left; nav tabs right; a mono readout strip below carrying the domain,
- * the live risk-free rate, and the build stamp — the vernacular of a plotting
- * instrument's status line.
+ * Header — a calibration rail. Wordmark (links oriz.in) + site mark left; nav
+ * tabs right; a mono status line below carrying the domain, the live risk-free
+ * rate, and the reading date — the vernacular of an instrument's status strip.
  */
 import assetsData from '~/data/assets.json'
 import Wordmark from '~/components/Wordmark.astro'
@@ -43,7 +42,7 @@ const nav = [
 </header>
 
 <style>
-  .hd { background: color-mix(in oklab, var(--plane) 82%, transparent); backdrop-filter: blur(6px); }
+  .hd { background: color-mix(in oklab, var(--plane) 86%, transparent); backdrop-filter: blur(6px); }
   .hd-bar {
     display: flex;
     align-items: center;
@@ -57,29 +56,31 @@ const nav = [
   .hd-div { color: var(--ink-mute); font-family: var(--font-display); font-weight: 400; }
   .hd-site {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--ink-mute);
   }
   .hd-site:hover { color: var(--frontier); }
 
-  .hd-nav { display: inline-flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
+  .hd-nav { display: inline-flex; align-items: center; gap: 0.25rem; flex-wrap: wrap; }
   .hd-tab {
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink-mute);
     padding: 0.35rem 0.6rem;
     border: 1px solid transparent;
-    border-radius: 6px;
+    border-radius: 3px;
     transition: color 0.12s, border-color 0.12s, background 0.12s;
   }
   .hd-tab:hover {
     color: var(--frontier);
     border-color: color-mix(in oklab, var(--frontier) 40%, transparent);
-    background: color-mix(in oklab, var(--frontier) 8%, transparent);
+    background: color-mix(in oklab, var(--frontier) 7%, transparent);
   }
 
   .hd-strip {
@@ -91,7 +92,7 @@ const nav = [
   .hd-readout {
     font-family: var(--font-mono);
     font-size: 10px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ink-mute);
   }
