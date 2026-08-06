@@ -587,6 +587,10 @@ const studioStyles = `
   display: flex;
   flex-direction: column;
   gap: 0;
+  min-width: 0;
+}
+.studio > * {
+  min-width: 0;
 }
 .studio-loading {
   padding: 3rem 2rem;
@@ -759,6 +763,8 @@ const studioStyles = `
 .studio-alloc {
   padding-block: 2rem;
   border-bottom: 1px solid var(--rule);
+  max-width: 100%;
+  overflow: hidden;
 }
 .section-h {
   font-family: var(--font-mono);
@@ -790,7 +796,7 @@ const studioStyles = `
 .stacked-seg:nth-child(n+6) { background: color-mix(in oklab, var(--plot) 60%, var(--ink-mute)); }
 .seg-below { background: color-mix(in oklab, var(--flag) 55%, var(--ink-mute) 45%) !important; }
 
-.alloc-table-wrap { overflow-x: auto; }
+.alloc-table-wrap { overflow-x: auto; max-width: 100%; }
 .alloc-table {
   width: 100%;
   border-collapse: collapse;

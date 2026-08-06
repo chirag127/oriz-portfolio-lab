@@ -24,6 +24,14 @@ import Header from '~/components/Header.astro'
 import JsonLd from '~/components/JsonLd.astro'
 import { bottomBarActions } from '~/data/bottombar-actions'
 import { SITE_CONFIG } from '~/lib/siteConfig'
+import { FAMILY_SITES } from '~/lib/family'
+
+const footerApps = FAMILY_SITES.map((s) => ({ name: s.name, url: s.url }))
+const footerBooks = [
+  { name: 'Books', url: 'https://books.oriz.in' },
+  { name: 'Book Lore', url: 'https://book-lore.oriz.in' },
+]
+const footerPackages = [{ name: 'Packages', url: 'https://packages.oriz.in' }]
 
 interface Props {
   title?: string
@@ -99,7 +107,7 @@ const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
         <div class="oriz-main"><slot /></div>
       </div>
     </main>
-    <Footer />
+    <Footer familySites={footerApps} books={footerBooks} packages={footerPackages} />
     <BottomBar actions={bottomBarActions} />
     <ConsentBanner />
   </body>
