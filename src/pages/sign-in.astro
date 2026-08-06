@@ -1,0 +1,42 @@
+---
+/*
+ * /sign-in — dedicated Clerk sign-in for oriz.in SSO, consistent with /account.
+ *
+ * The header mounts NO Clerk island (static nav only), so this page has exactly
+ * ONE ClerkProvider — the AccountIsland. Public content stays ungated; this
+ * route just hosts the shared *.oriz.in sign-in surface.
+ */
+import AccountIsland from '~/components/AccountIsland'
+import BaseLayout from '~/layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title="Sign in — Portfolio Lab"
+  description="Sign in to oriz. One account works across every oriz site. The studio is fully public without an account."
+  noindex={true}
+>
+  <div class="spine page-head">
+    <p class="eyebrow mono">oriz SSO · public-first</p>
+    <h1>Sign in</h1>
+    <p class="lede">
+      One account works across every oriz site — sign in once, roam the family.
+      The studio is fully public and needs no account.
+    </p>
+  </div>
+
+  <div class="spine acct-wrap">
+    <AccountIsland client:only="react" />
+  </div>
+</BaseLayout>
+
+<style>
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--frontier);
+    margin: 0 0 0.75rem;
+    font-family: var(--font-mono);
+  }
+  .acct-wrap { padding-block: 2rem 4rem; max-width: 560px; }
+</style>
