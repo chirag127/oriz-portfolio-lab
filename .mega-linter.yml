@@ -1,0 +1,15 @@
+# MegaLinter configuration for portfolio-lab
+# Disable linters that produce false-positives or are incompatible with this stack.
+
+COPYPASTE_JSCPD_DISABLE_ERRORS: true         # CSS/design files repeat patterns intentionally
+MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true  # GH stargazers link is conditionally available
+YAML_YAMLLINT_FILTER_REGEX_EXCLUDE: (pnpm-lock\.yaml)  # lockfile lines exceed 500 chars by design
+TYPESCRIPT_TS_STANDARD_DISABLE_ERRORS: true  # conflicts with Astro tsconfig; biome handles TS linting
+YAML_V8R_DISABLE_ERRORS: true               # schema validation noise
+SPELL_CSPELL_DISABLE_ERRORS: true           # financial/domain terms trigger false positives
+SPELL_LYCHEE_DISABLE_ERRORS: true           # external link checks are flaky in CI
+REPOSITORY_CHECKOV_DISABLE_ERRORS: true     # IaC checks not applicable to static site
+REPOSITORY_DEVSKIM_DISABLE_ERRORS: true     # crypto/security pattern false positives in CSS vars
+REPOSITORY_GRYPE_DISABLE_ERRORS: true       # vulnerability scanner; managed via Dependabot separately
+REPOSITORY_KICS_DISABLE_ERRORS: true        # IaC checks not applicable
+REPOSITORY_TRIVY_DISABLE_ERRORS: true       # vulnerability scanner; managed via Dependabot separately
