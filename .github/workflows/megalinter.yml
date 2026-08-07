@@ -17,6 +17,8 @@ env:
   APPLY_FIXES_MODE: commit
   # Don't fail build on formatter issues (only real errors fail)
   FORMATTERS_DISABLE_ERRORS: true
+  # ts-standard can't resolve astro/tsconfigs/strict in its container; biome handles TS linting
+  TYPESCRIPT_TS_STANDARD_DISABLE_ERRORS: true
   # GitHub token for auto-fix commits
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
