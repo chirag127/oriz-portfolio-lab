@@ -38,6 +38,8 @@ interface Props {
   description?: string
   canonical?: string
   noindex?: boolean
+  /** Absolute OG/Twitter image URL. Defaults to the site OG card. */
+  ogImage?: string
   /** Page-level JSON-LD blocks appended to the default Org+WebSite+Person triple. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[]
 }
@@ -47,8 +49,11 @@ const {
   description = SITE_CONFIG.description,
   canonical = `${SITE_CONFIG.origin}${Astro.url.pathname}`,
   noindex = false,
+  ogImage = `${SITE_CONFIG.origin}/og.svg`,
   jsonLd,
 } = Astro.props
+
+const ogImageAbs = new URL(ogImage, SITE_CONFIG.origin).href
 
 const beaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN
 const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
@@ -69,8 +74,14 @@ const cfAnalyticsEnabled = import.meta.env.PUBLIC_ENABLE_CF_ANALYTICS === 'true'
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={`${SITE_CONFIG.name} — oriz`} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:image:alt" content={`${SITE_CONFIG.name} — ${SITE_CONFIG.tagline}`} />
+    <meta property="og:image:type" content="image/svg+xml" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@chirag127" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageAbs} />
     <meta name="theme-color" content="#ECEEF1" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

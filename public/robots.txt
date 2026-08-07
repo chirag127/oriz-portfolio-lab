@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /account/
+Disallow: /sign-in/
+
+Sitemap: https://portfolio-lab.oriz.in/sitemap-index.xml

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Portfolio Lab — plot the efficient frontier, find your max-Sharpe portfolio">
+  <rect width="1200" height="630" fill="#ECEEF1"/>
+  <g stroke="#D7DBE0" stroke-width="1">
+    <line x1="0" y1="157" x2="1200" y2="157"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="472" x2="1200" y2="472"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+  </g>
+  <path d="M120 520 Q260 300 720 190 Q900 150 1080 130" fill="none" stroke="#16181d" stroke-width="4" stroke-linecap="round"/>
+  <line x1="120" y1="520" x2="740" y2="256" stroke="#3D3AE0" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="120" cy="520" r="9" fill="#C7422E"/>
+  <circle cx="640" cy="298" r="16" fill="#3D3AE0"/>
+  <circle cx="640" cy="298" r="30" fill="none" stroke="#3D3AE0" stroke-width="2" opacity="0.5"/>
+  <text x="90" y="120" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="800" fill="#16181d" letter-spacing="-2">Portfolio Lab</text>
+  <text x="92" y="176" font-family="ui-monospace, 'SF Mono', monospace" font-size="24" fill="#3D3AE0" letter-spacing="3">FIND YOUR MAX-SHARPE PORTFOLIO</text>
+  <text x="92" y="592" font-family="ui-monospace, 'SF Mono', monospace" font-size="20" fill="#5b6067" letter-spacing="2">portfolio-lab.oriz.in · free · no sign-up · runs in your browser</text>
+</svg>

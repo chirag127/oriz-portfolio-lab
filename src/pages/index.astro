@@ -5,7 +5,29 @@ import BaseLayout from '~/layouts/BaseLayout.astro'
 import { inr, pct } from '~/lib/format'
 import { SITE_CONFIG } from '~/lib/siteConfig'
 
-const jsonLd = {
+const softwareApp = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: SITE_CONFIG.name,
+  url: SITE_CONFIG.origin,
+  applicationCategory: 'FinanceApplication',
+  applicationSubCategory: 'Portfolio optimizer',
+  operatingSystem: 'Web',
+  description: SITE_CONFIG.description,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+  featureList: [
+    'Efficient-frontier plot',
+    'Max-Sharpe (tangency) portfolio',
+    'Monte Carlo projection',
+    'Bear/base/bull downside bands',
+    'No sign-up, runs in your browser',
+  ],
+  isAccessibleForFree: true,
+  inLanguage: 'en',
+  author: { '@type': 'Person', name: 'Chirag Singhal', url: 'https://me.oriz.in' },
+}
+
+const webSite = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: `${SITE_CONFIG.name} — oriz`,
@@ -13,6 +35,8 @@ const jsonLd = {
   description: SITE_CONFIG.description,
   publisher: { '@type': 'Person', name: 'Chirag Singhal', url: 'https://oriz.in' },
 }
+
+const jsonLd = [softwareApp, webSite]
 
 const strips = [
   {

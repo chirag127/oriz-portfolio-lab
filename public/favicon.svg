@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Portfolio Lab">
+  <rect width="32" height="32" rx="6" fill="#ECEEF1"/>
+  <path d="M5 26 Q9 12 27 6" fill="none" stroke="#16181d" stroke-width="2" stroke-linecap="round"/>
+  <line x1="5" y1="26" x2="26" y2="9" stroke="#3D3AE0" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="20.2" cy="12.1" r="3" fill="#3D3AE0"/>
+  <circle cx="5" cy="26" r="1.8" fill="#C7422E"/>
+</svg>
