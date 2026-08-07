@@ -38,8 +38,7 @@ jobs:
           APPLY_FIXES_MODE: commit
           FORMATTERS_DISABLE_ERRORS: true
           # ts-standard can't resolve astro/tsconfigs/strict in container; biome handles TS linting
-          TYPESCRIPT_TS_STANDARD_DISABLE_ERRORS: true
-          TYPESCRIPT_TS_STANDARD_DISABLED: true
+          TYPESCRIPT_STANDARD_DISABLE_ERRORS: true
           MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
           YAML_V8R_DISABLE_ERRORS: true
           SPELL_CSPELL_DISABLE_ERRORS: true
