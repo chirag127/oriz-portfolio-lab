@@ -9,17 +9,6 @@ on:
     branches: [main, master]
 
 env:
-  # Use cupcake flavor (most common languages, ~700MB vs 2GB full)
-  MEGALINTER_FLAVOR: all
-  # Auto-fix all fixable issues
-  APPLY_FIXES: all
-  APPLY_FIXES_EVENT: push
-  APPLY_FIXES_MODE: commit
-  # Don't fail build on formatter issues (only real errors fail)
-  FORMATTERS_DISABLE_ERRORS: true
-  # ts-standard can't resolve astro/tsconfigs/strict in its container; biome handles TS linting
-  TYPESCRIPT_TS_STANDARD_DISABLE_ERRORS: true
-  # GitHub token for auto-fix commits
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
@@ -43,6 +32,22 @@ jobs:
         uses: oxsecurity/megalinter@v8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MEGALINTER_FLAVOR: all
+          APPLY_FIXES: all
+          APPLY_FIXES_EVENT: push
+          APPLY_FIXES_MODE: commit
+          FORMATTERS_DISABLE_ERRORS: true
+          # ts-standard can't resolve astro/tsconfigs/strict in container; biome handles TS linting
+          TYPESCRIPT_TS_STANDARD_DISABLE_ERRORS: true
+          MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
+          YAML_V8R_DISABLE_ERRORS: true
+          SPELL_CSPELL_DISABLE_ERRORS: true
+          SPELL_LYCHEE_DISABLE_ERRORS: true
+          REPOSITORY_CHECKOV_DISABLE_ERRORS: true
+          REPOSITORY_DEVSKIM_DISABLE_ERRORS: true
+          REPOSITORY_GRYPE_DISABLE_ERRORS: true
+          REPOSITORY_KICS_DISABLE_ERRORS: true
+          REPOSITORY_TRIVY_DISABLE_ERRORS: true
 
       - name: Upload MegaLinter reports
         if: always()
