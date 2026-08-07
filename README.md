@@ -1,6 +1,6 @@
 # Portfolio Lab
 
-[![Stars](https://img.shields.io/github/stars/chirag127/portfolio-lab?style=flat)](https://github.com/chirag127/portfolio-lab/stargazers) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/chirag127/oriz-portfolio-lab?style=flat)](https://github.com/chirag127/oriz-portfolio-lab/stargazers) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **Live at**: https://portfolio-lab.oriz.in · **Status**: production
 

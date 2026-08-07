@@ -1,0 +1,4 @@
+{
+  "threshold": 5,
+  "ignore": ["**/*.lock", "**/pnpm-lock.yaml", "**/package-lock.json"]
+}
