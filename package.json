@@ -31,7 +31,7 @@
     "@chirag127/oriz-ui": "^0.1.0",
     "@clerk/clerk-react": "^5.61.3",
     "@tailwindcss/vite": "^4.3.1",
-    "astro": "^6.4.7",
+    "astro": "^7.1.1",
     "firebase": "^12.17.1",
     "lucide-react": "^1.31.0",
     "react": "^19.2.7",
