@@ -41,17 +41,17 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.0",
-    "@biomejs/biome": "^2.4.8",
+    "@biomejs/biome": "^2.5.7",
     "@chirag127/astro-test-utils": "^0.1.1",
     "@playwright/test": "^1.48.0",
-    "@types/node": "^22.10.0",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vitest/coverage-v8": "^2.0.0",
-    "@vitest/ui": "^2.0.0",
-    "happy-dom": "^15.0.0",
-    "typescript": "^5.7.0",
-    "vitest": "^2.0.0",
-    "wrangler": "^4.102.0"
+    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/ui": "^4.1.10",
+    "happy-dom": "^20.11.2",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10",
+    "wrangler": "^4.120.0"
   }
 }
