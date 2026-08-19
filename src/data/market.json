@@ -1,14 +1,14 @@
 {
   "_meta": {
     "note": "Live market levels refreshed nightly by scripts/scrape.mjs via GitHub Actions. Seed values below are placeholders until the first scrape run. Forward return assumptions live in assets.json and are NOT auto-updated.",
-    "updated": "2026-08-18",
+    "updated": "2026-08-19",
     "source": "scrape"
   },
-  "nifty50": 24154.9,
-  "nifty500tri": 23472.4,
+  "nifty50": 24078.3,
+  "nifty500tri": 23386.2,
   "sensex": null,
-  "gold_inr_10g": 135087,
-  "usdinr": 95.61,
+  "gold_inr_10g": 137243,
+  "usdinr": 95.69,
   "gsec10y": 0.068,
-  "sp500": 7703
+  "sp500": 7717
 }
