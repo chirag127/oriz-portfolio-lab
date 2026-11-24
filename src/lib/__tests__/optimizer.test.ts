@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { flagBelowFloor, frontier, maxSharpe, minVariance, riskParity } from '../optimizer.js'
+import { flagBelowFloor, frontier, maxReturn, maxSharpe, minVariance, riskParity } from '../optimizer.js'
 import type { Asset, CorrelationMatrix } from '../types.js'
 
 // ---------------------------------------------------------------------------
@@ -201,5 +201,42 @@ describe('frontier', () => {
     for (let i = 1; i < f.length; i++) {
       expect(f[i].stats.volatility).toBeGreaterThanOrEqual(f[i - 1].stats.volatility)
     }
+  })
+})
+
+// ---------------------------------------------------------------------------
+// maxReturn (aggressive preset)
+// ---------------------------------------------------------------------------
+
+describe('maxReturn', () => {
+  it('weights sum to ~1', () => {
+    const { allocation } = maxReturn(ASSETS, CORR)
+    expect(weightsSum(allocation)).toBeCloseTo(1, 6)
+  })
+
+  it('uncapped concentrates 100% into highest-return asset', () => {
+    // eq (0.14) is the highest expectedReturn in the fixture
+    const { allocation } = maxReturn(ASSETS, CORR)
+    const eqW = allocation.find((a) => a.assetId === 'eq')?.weight
+    expect(eqW).toBeCloseTo(1, 6)
+  })
+
+  it('expectedReturn equals the top asset return when uncapped', () => {
+    const { stats } = maxReturn(ASSETS, CORR)
+    expect(stats.expectedReturn).toBeCloseTo(0.14, 6)
+  })
+
+  it('respects sleeveCaps, filling from highest return down', () => {
+    const cap = 0.3
+    const { allocation } = maxReturn(ASSETS, CORR, { sleeveCaps: { 'indian-equity': cap } })
+    const eqW = allocation.find((a) => a.assetId === 'eq')?.weight ?? 0
+    expect(eqW).toBeLessThanOrEqual(cap + 1e-9)
+    expect(weightsSum(allocation)).toBeCloseTo(1, 6)
+  })
+
+  it('never beats maxSharpe on Sharpe (aggressive != optimal)', () => {
+    const mr = maxReturn(ASSETS, CORR)
+    const ms = maxSharpe(ASSETS, CORR)
+    expect(mr.stats.sharpe).toBeLessThanOrEqual(ms.stats.sharpe + 1e-9)
   })
 })
