@@ -1,0 +1,10 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b
+    hooks:
+      - id: check-json
+      - id: check-merge-conflict
+        args: [--assume-in-merge]
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: [--fix=no]
